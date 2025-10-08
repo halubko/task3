@@ -1,0 +1,25 @@
+{
+  "name": "task-3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack",
+    "build": "webpack --env mode=production",
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/halubko/task3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/halubko/task3/issues"
+  },
+  "homepage": "https://github.com/halubko/task3#readme",
+  "devDependencies": {
+    "webpack": "^5.102.1",
+    "webpack-cli": "^6.0.1"
+  }
+}
