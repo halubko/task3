@@ -1,5 +1,4 @@
 import webpack from "webpack";
-import path from "path";
 import {buildDevServer} from "./buildDevServer";
 import {buildLoaders} from "./buildLoaders";
 import {buildPlugins} from "./buildPlugins";
@@ -7,12 +6,12 @@ import {buildResolvers} from "./buildResolvers";
 import {BuildOptions} from "./types/types";
 
 export function buildWebpack(options: BuildOptions): webpack.Configuration{
-    const isDev = options.mode ?? 'development';
+    const isDev = options.mode === 'development';
 
     return {
         mode: options.mode ?? 'development',
         module: {
-            rules: buildLoaders(options)
+            rules: buildLoaders(options),
         },
         resolve: buildResolvers(options),
         plugins: buildPlugins(options),

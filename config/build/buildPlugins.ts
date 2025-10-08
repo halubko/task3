@@ -15,6 +15,7 @@ export function buildPlugins({mode, paths}: BuildOptions): Configuration['plugin
         //For pushing plugins for development env
     }
     if (isProd) {
+        //For pushing plugins for production env
         plugins.push(new MiniCssExtractPlugin({
             filename: "css/[name].[contenthash:8].css",
             chunkFilename: "css/[name].[contenthash:8].css",

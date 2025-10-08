@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack",
-    "prod": "webpack --env mode=production",
+    "build": "webpack --env mode=production",
     "start": "webpack serve"
   },
   "repository": {
@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-router": "^7.9.4"
   }
 }
