@@ -2,17 +2,22 @@ import React from 'react';
 import {Box, CircularProgress, Container} from "@mui/material";
 import AuthForm from "../components/AuthForm";
 import {useAppSelector} from "../hooks/redux";
+import AuthError from "../components/AuthError";
 
 const LoginPage = () => {
-    const isLoading = useAppSelector(state => state.user.isLoading);
-    const user = useAppSelector(state => state.user.user);
+    const {isLoading, error} = useAppSelector(state => state.user);
 
-    console.log(user);
+    console.log(error)
 
     return (
-        <Container component="main" sx={{ height: '100vh', display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ width: '100%' }}>
-                {isLoading ? <CircularProgress color="primary" /> : <AuthForm mode='login'/>}
+        <Container
+            component="main"
+            sx={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+            {error.status === 0 ? null : <AuthError />}
+            <Box sx={{width: '100%'}}>
+                {isLoading ?
+                    <CircularProgress color="primary" sx={{display:'block', margin:'auto'}}/> :
+                    <AuthForm mode='login'/>}
             </Box>
         </Container>
     );

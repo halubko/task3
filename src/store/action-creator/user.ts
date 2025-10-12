@@ -17,6 +17,9 @@ export const loginUsers = (payload: ILoginPayload) => async (dispatch: AppDispat
         })
         dispatch(userSlice.actions.usersFetchingSuccess(response.data))
     } catch (e){
-        dispatch(userSlice.actions.usersFetchingError(e.message))
+        dispatch(userSlice.actions.usersFetchingError({
+            status: e.response.status,
+            message: e.response.data.message,
+        }))
     }
 }

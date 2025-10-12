@@ -1,10 +1,11 @@
 import {IUser} from "../../models/IUser";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {IError} from "../../models/IError";
 
 interface UserState {
     user: IUser;
     isLoading: boolean;
-    error: string;
+    error: IError;
 }
 
 const initialState: UserState = {
@@ -16,7 +17,10 @@ const initialState: UserState = {
         refreshToken: "",
     },
     isLoading: false,
-    error: '',
+    error: {
+        status: 0,
+        message: ""
+    },
 }
 
 export const userSlice = createSlice({
@@ -28,10 +32,10 @@ export const userSlice = createSlice({
         },
         usersFetchingSuccess(state, action: PayloadAction<IUser>){
             state.isLoading = false;
-            state.error = '';
+            state.error = {status: 0, message: ""};
             state.user = action.payload;
         },
-        usersFetchingError(state, action: PayloadAction<string>){
+        usersFetchingError(state, action: PayloadAction<IError>){
             state.isLoading = false;
             state.error = action.payload;
         }
