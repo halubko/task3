@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import {Provider} from "react-redux";
 import {setupStore} from "./store/store";
+import ProductsPage from "./pages/ProductsPage";
 
 const root = document.getElementById('root');
 const app = createRoot(root);
@@ -24,6 +25,12 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <App/>,
+        children:[
+            {
+                path:'products',
+                element: <ProductsPage/>,
+            }
+        ]
     }
 ]);
 
