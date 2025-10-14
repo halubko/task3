@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {IProduct} from "../models/IProduct";
+import {IProduct} from "../../models/IProduct";
 import {Box, Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 

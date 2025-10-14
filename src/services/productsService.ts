@@ -8,16 +8,19 @@ interface ProductsResponse {
     skip: number;
 }
 
+interface GetProductsParams {
+    limit: number;
+    skip: number;
+}
+
 export const productsAPI = createApi({
     reducerPath: 'productsAPI',
     baseQuery: fetchBaseQuery({baseUrl: 'https://dummyjson.com/'}),
     endpoints:(build)=> ({
-        getProducts: build.query<ProductsResponse, number>({
-            query: (limit: number = 10) => ({
+        getProducts: build.query<ProductsResponse, GetProductsParams>({
+            query: (params) => ({
                 url: 'products',
-                params: {
-                    _limit: limit,
-                }
+                params,
             })
         }),
         getProductById: build.query<IProduct, number>({

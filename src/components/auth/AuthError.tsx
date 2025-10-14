@@ -2,8 +2,7 @@ import React from 'react';
 import {Alert, AlertTitle, Box} from "@mui/material";
 import {useAppSelector} from "../hooks/redux";
 
-const AuthError = () => {
-    const error = useAppSelector(state => state.user.error)
+const AuthError = ({error}: any) => {
 
     const customMessage = (): string | null =>{
         switch (error.status){
