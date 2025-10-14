@@ -7,28 +7,32 @@ import SignUpPage from "./pages/SignUpPage";
 import {Provider} from "react-redux";
 import {setupStore} from "./store/store";
 import ProductsPage from "./pages/ProductsPage";
+import AuthLayout from "./layouts/AuthLayout";
+import ProductsLayout from "./layouts/ProductsLayout";
 
 const root = document.getElementById('root');
 const app = createRoot(root);
 const store = setupStore();
 
-
 const router = createBrowserRouter([
     {
-        path: '/login',
-        element: <LoginPage/>
-    },
-    {
-        path: '/signup',
-        element: <SignUpPage/>
-    },
-    {
         path: "/",
-        element: <App/>,
+        Component: App,
         children:[
             {
+                path: 'auth',
+                Component: AuthLayout,
+                children:[
+                    {path:'login', Component: LoginPage},
+                    {path:'signup', Component: SignUpPage},
+                ],
+            },
+            {
                 path:'products',
-                element: <ProductsPage/>,
+                Component: ProductsLayout,
+                children:[
+                    {path:'all', Component: ProductsPage},
+                ]
             }
         ]
     }

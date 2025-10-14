@@ -20,6 +20,7 @@ export function buildWebpack(options: BuildOptions): webpack.Configuration{
             path: options.paths.output,
             filename: "bundle.js",
             clean: true,
+            publicPath: '/',
         },
         devtool: isDev && 'inline-source-map',
         devServer: isDev ? buildDevServer(options) : undefined,
