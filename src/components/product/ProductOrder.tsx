@@ -1,21 +1,20 @@
-import React, { useState } from "react"
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 import { useSearchParams } from "react-router-dom"
 
-const ProductSortBy = () => {
-   const [sortParams, setSortParams] = useSearchParams()
-   const [sortType, setSortType] = useState("")
+const ProductOrder = () => {
+   const [orderParams, setOrderParams] = useSearchParams()
 
    const handleSort = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSortType(e.target.value)
       const newQuery = e.target.value
 
-      setSortParams((prevSortParams) => {
-         const newSearchParams = new URLSearchParams(prevSortParams)
+      setOrderParams((prevOrderParams) => {
+         const newSearchParams = new URLSearchParams(prevOrderParams)
 
          if (newQuery) {
-            newSearchParams.set("sortBy", newQuery)
+            newSearchParams.set("sortBy", "price")
+            newSearchParams.set("order", newQuery)
          } else {
+            newSearchParams.delete("order")
             newSearchParams.delete("sortBy")
          }
 
@@ -29,13 +28,11 @@ const ProductSortBy = () => {
          <Select
             labelId="demo-select-small-label"
             id="demo-select-small"
-            value={sortType}
+            value={orderParams.get("order")}
             label="Sort price"
             onChange={handleSort}
          >
-            <MenuItem value="">
-               <em>None</em>
-            </MenuItem>
+            <MenuItem value="">None</MenuItem>
             <MenuItem value="desc">Desc</MenuItem>
             <MenuItem value="asc">Asc</MenuItem>
          </Select>
@@ -43,4 +40,4 @@ const ProductSortBy = () => {
    )
 }
 
-export default ProductSortBy
+export default ProductOrder

@@ -13,29 +13,49 @@ interface CategoriesResponse {
    slug: string
 }
 
-interface GetProductsParams {
+export interface GetProductsParams {
    limit: number
    skip: number
+   sortBy?: string
+   order?: string
+   q?: string
+}
+
+interface GetProductsByCategoryParams {
+   productType: string
+   params: GetProductsParams
 }
 
 export const productsAPI = createApi({
    reducerPath: "productsAPI",
-   baseQuery: fetchBaseQuery({ baseUrl: "https://dummyjson.com/" }),
+   baseQuery: fetchBaseQuery({ baseUrl: "https://dummyjson.com/products" }),
    endpoints: (build) => ({
       getProducts: build.query<ProductsResponse, GetProductsParams>({
          query: (params) => ({
-            url: "products",
+            url: "",
             params,
          }),
       }),
       getProductById: build.query<IProduct, number>({
          query: (id: number) => ({
-            url: `products/${id}`,
+            url: `/${id}`,
          }),
       }),
-      getProductCategories: build.query<CategoriesResponse[], void>({
+      getProductsCategories: build.query<CategoriesResponse[], void>({
          query: () => ({
-            url: "products/categories",
+            url: "/categories",
+         }),
+      }),
+      getSearchProducts: build.query<ProductsResponse, GetProductsParams>({
+         query: (params) => ({
+            url: "/search",
+            params,
+         }),
+      }),
+      getProductsByCategory: build.query<ProductsResponse, GetProductsByCategoryParams>({
+         query: ({ productType, params }) => ({
+            url: `category/${productType}`,
+            params,
          }),
       }),
    }),

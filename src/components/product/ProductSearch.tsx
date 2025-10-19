@@ -13,9 +13,10 @@ const ProductSearch = () => {
          const newSearchParams = new URLSearchParams(prevSearchParams)
 
          if (newQuery) {
-            newSearchParams.set("q", newQuery)
+            newSearchParams.set("search", newQuery)
+            newSearchParams.delete("category")
          } else {
-            newSearchParams.delete("q")
+            newSearchParams.delete("search")
          }
 
          return newSearchParams
@@ -23,7 +24,7 @@ const ProductSearch = () => {
    }
 
    return (
-      <Box sx={{ backgroundColor: "primary", }}>
+      <Box sx={{ backgroundColor: "primary"}}>
          <Box
             sx={(theme) => ({
                position: "relative",
@@ -53,6 +54,7 @@ const ProductSearch = () => {
 
             <InputBase
                placeholder="Search…"
+               value={searchParams.get("search")}
                inputProps={{ "aria-label": "search" }}
                onChange={handleSearchChange}
                sx={(theme) => ({
@@ -60,15 +62,8 @@ const ProductSearch = () => {
                   width: "100%",
                   "& .MuiInputBase-input": {
                      padding: theme.spacing(1, 1, 1, 0),
-                     // vertical padding + font size from searchIcon
                      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
                      transition: theme.transitions.create("width"),
-                     [theme.breakpoints.up("sm")]: {
-                        width: "12ch",
-                        "&:focus": {
-                           width: "20ch",
-                        },
-                     },
                   },
                })}
             />

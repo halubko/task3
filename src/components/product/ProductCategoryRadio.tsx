@@ -4,7 +4,7 @@ import { productsAPI } from "../../services/productsService"
 import { useSearchParams } from "react-router-dom"
 
 const ProductCategoryRadio = () => {
-   const { data } = productsAPI.useGetProductCategoriesQuery()
+   const { data } = productsAPI.useGetProductsCategoriesQuery()
    const [categoryParams, setCategoryParams] = useSearchParams()
 
    const handleCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,6 +15,7 @@ const ProductCategoryRadio = () => {
 
          if (newQuery) {
             newSearchParams.set("category", newQuery)
+            newSearchParams.delete("search")
          } else {
             newSearchParams.delete("category")
          }
