@@ -5,6 +5,11 @@ import globals from "globals"
 import { defineConfig } from "eslint/config"
 import prettierPlugin from "eslint-plugin-prettier"
 import prettierConfig from "eslint-config-prettier"
+import path from "path"
+import { fileURLToPath } from "node:url"
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig([
   {
@@ -22,7 +27,7 @@ export default defineConfig([
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        project: "./tsconfig.json",
+        project: [path.resolve(__dirname, "./tsconfig.json")],
         ecmaFeatures: {
           jsx: true,
         },
@@ -33,27 +38,13 @@ export default defineConfig([
       sourceType: "module",
     },
     rules: {
-      "prettier/prettier": "error",
+      "prettier/prettier": "warn",
       "no-eval": "error",
       "no-implied-eval": "error",
       "no-unused-vars": "warn",
-      "no-console": "off",
-      "no-extra-parens": [
-        "error",
-        "all",
-        {
-          nestedBinaryExpressions: false,
-        },
-      ],
+      "no-console": "warn",
       curly: "error",
       eqeqeq: "error",
-      "no-magic-numbers": [
-        "warn",
-        {
-          ignore: [0, 1],
-          ignoreArrayIndexes: true,
-        },
-      ],
       "@typescript-eslint/no-explicit-any": "warn",
     },
     ignores: ["webpack.config.js"],
