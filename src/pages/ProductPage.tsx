@@ -4,22 +4,27 @@ import { productsAPI } from "../services/productsService"
 import {
    Box,
    Button,
+   CircularProgress,
    Container,
    Divider,
-   Paper,
-   Typography,
-   CircularProgress,
    Grid,
+   IconButton,
    ImageList,
    ImageListItem,
-   IconButton,
+   Paper,
+   Typography,
 } from "@mui/material"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
+import RemoveIcon from "@mui/icons-material/Remove"
+import AddIcon from "@mui/icons-material/Add"
+import { useCartQuantityActions } from "../hooks/useCartQuantityActions"
 
 const ProductPage = () => {
    const params = useParams()
    const navigate = useNavigate()
+   const { quantityInCart, handleAddToCart, handleIncrement, handleDecrement } =
+      useCartQuantityActions(Number(params.id))
 
    const { data, isLoading } = productsAPI.useGetProductByIdQuery(Number(params.id))
 
@@ -56,15 +61,39 @@ const ProductPage = () => {
                      <Typography variant="h4" color="primary" component="h1" fontWeight="bold">
                         ${data.price}
                      </Typography>
-                     <Button
-                        size="large"
-                        variant="contained"
-                        color="primary"
-                        startIcon={<AddShoppingCartIcon />}
-                        onClick={() => console.log()}
-                     >
-                        Add to cart
-                     </Button>
+                     {quantityInCart > 0 ? (
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                           <IconButton
+                              size="small"
+                              color="primary"
+                              onClick={() => handleDecrement()}
+                           >
+                              <RemoveIcon />
+                           </IconButton>
+
+                           <Typography variant="body1" component="span">
+                              {quantityInCart}
+                           </Typography>
+
+                           <IconButton
+                              size="small"
+                              color="primary"
+                              onClick={() => handleIncrement()}
+                           >
+                              <AddIcon />
+                           </IconButton>
+                        </Box>
+                     ) : (
+                        <Button
+                           size="small"
+                           variant="contained"
+                           color="primary"
+                           startIcon={<AddShoppingCartIcon />}
+                           onClick={() => handleAddToCart()}
+                        >
+                           Add to cart
+                        </Button>
+                     )}
                   </Box>
                </Grid>
 
@@ -74,7 +103,7 @@ const ProductPage = () => {
                   <Typography variant="h6" component="h2" gutterBottom>
                      Description:
                   </Typography>
-                  <Typography variant="body1" color="text.secondary" paragraph>
+                  <Typography variant="body1" color="text.secondary">
                      {data.description}
                   </Typography>
 
