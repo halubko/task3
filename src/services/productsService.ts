@@ -1,60 +1,42 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { createApi } from "@reduxjs/toolkit/query/react"
 import { IProduct } from "../models/IProduct"
-
-interface ProductsResponse {
-   products: IProduct[]
-   limit: number
-   total: number
-   skip: number
-}
-
-interface CategoriesResponse {
-   name: string
-   slug: string
-}
-
-export interface GetProductsParams {
-   limit: number
-   skip: number
-   sortBy?: string
-   order?: string
-   q?: string
-}
-
-interface GetProductsByCategoryParams {
-   productType: string
-   params: GetProductsParams
-}
+import {
+   CategoriesResponse,
+   GetProductsByCategoryParams,
+   GetProductsParams,
+   ProductsResponse,
+} from "../models/responses/IProductsResponses"
+import { baseQueryWithReauth } from "./index"
 
 export const productsAPI = createApi({
    reducerPath: "productsAPI",
-   baseQuery: fetchBaseQuery({ baseUrl: "https://dummyjson.com/products" }),
+   baseQuery: baseQueryWithReauth,
    endpoints: (build) => ({
       getProducts: build.query<ProductsResponse, GetProductsParams>({
          query: (params) => ({
-            url: "",
+            url: "/products",
             params,
          }),
       }),
       getProductById: build.query<IProduct, number>({
          query: (id: number) => ({
-            url: `/${id}`,
+            url: `/products/${id}`,
          }),
       }),
       getProductsCategories: build.query<CategoriesResponse[], void>({
          query: () => ({
-            url: "/categories",
+            url: "/products/categories",
          }),
       }),
       getSearchProducts: build.query<ProductsResponse, GetProductsParams>({
          query: (params) => ({
-            url: "/search",
+            url: "/products/search",
             params,
          }),
       }),
       getProductsByCategory: build.query<ProductsResponse, GetProductsByCategoryParams>({
          query: ({ productType, params }) => ({
-            url: `category/${productType}`,
+            url: `/products/category/${productType}`,
             params,
          }),
       }),
