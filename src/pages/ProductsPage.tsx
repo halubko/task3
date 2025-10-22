@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { GetProductsParams, productsAPI } from "../services/productsService"
+import { productsAPI } from "../services/productsService"
 import { Box, CircularProgress, Grid } from "@mui/material"
 import ProductCard from "../components/product/ProductCard"
 import ProductPagination from "../components/product/ProductPagination"
 import ProductFilter from "../components/product/ProductFilter"
-import { getPages } from "../utils/pages"
+import { getPages } from "../utils/pagesCounter"
 import { useSearchParams } from "react-router-dom"
+import { GetProductsParams } from "../models/responses/IProductsResponses"
 
 const ProductsPage = () => {
    const [limit, setLimit] = useState<number>(10)
@@ -76,10 +77,6 @@ const ProductsPage = () => {
 
    const totalPages = data ? getPages(data.total, limit) : 1
 
-   if (isLoading) {
-      return <CircularProgress color="primary" sx={{ display: "block", margin: "auto" }} />
-   }
-
    return (
       <Box sx={{ flexGrow: 1 }}>
          <Box sx={{ display: "flex" }}>
@@ -87,7 +84,7 @@ const ProductsPage = () => {
             {isLoading ? (
                <CircularProgress color="primary" sx={{ display: "block", margin: "auto" }} />
             ) : (
-               <Grid container sx={{ flexGrow: 1, maxWidth: 1200 }}>
+               <Grid container sx={{ flexGrow: 1 }}>
                   {data &&
                      data.products.map((product) => (
                         <Grid key={product.id}>
