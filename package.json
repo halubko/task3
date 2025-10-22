@@ -7,6 +7,7 @@
     "dev": "webpack",
     "build": "webpack --env mode=production",
     "start": "webpack serve",
+    "prepare": "husky install",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -21,8 +22,17 @@
     "url": "https://github.com/halubko/task3/issues"
   },
   "homepage": "https://github.com/halubko/task3#readme",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
     "@types/node": "^24.7.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
@@ -32,6 +42,7 @@
     "@types/webpack-dev-server": "^4.7.1",
     "@typescript-eslint/eslint-plugin": "^8.46.1",
     "@typescript-eslint/parser": "^8.46.1",
+    "babel-loader": "^10.0.0",
     "css-loader": "^7.1.2",
     "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
@@ -41,16 +52,15 @@
     "eslint-webpack-plugin": "^5.0.2",
     "fork-ts-checker-webpack-plugin": "^9.1.0",
     "html-webpack-plugin": "^5.6.4",
+    "husky": "^9.1.7",
     "jiti": "^2.6.1",
+    "lint-staged": "^16.2.6",
     "mini-css-extract-plugin": "^2.9.4",
     "prettier": "3.6.2",
-    "react-refresh": "^0.18.0",
-    "react-refresh-typescript": "^2.0.11",
     "react-router-dom": "^7.9.4",
     "sass": "^1.93.2",
     "sass-loader": "^16.0.5",
     "style-loader": "^4.0.0",
-    "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.1",

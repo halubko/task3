@@ -4,7 +4,6 @@ import { BuildOptions } from "./types/types"
 import MiniCssExtractPlugin from "mini-css-extract-plugin"
 import ESLintWebpackPlugin from "eslint-webpack-plugin"
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin"
-import ReactRefreshPlugin from "@pmmmwh/react-refresh-webpack-plugin"
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer"
 
 export function buildPlugins({ mode, paths }: BuildOptions): Configuration["plugins"] {
@@ -20,7 +19,6 @@ export function buildPlugins({ mode, paths }: BuildOptions): Configuration["plug
       //For pushing plugins for development env
       plugins.push(new ESLintWebpackPlugin())
       plugins.push(new ForkTsCheckerWebpackPlugin())
-      plugins.push(new ReactRefreshPlugin())
    }
    if (isProd) {
       //For pushing plugins for production env

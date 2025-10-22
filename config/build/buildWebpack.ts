@@ -11,14 +11,14 @@ export function buildWebpack(options: BuildOptions): webpack.Configuration {
    return {
       mode: options.mode ?? "development",
       module: {
-         rules: buildLoaders(options),
+         rules: buildLoaders(),
       },
       resolve: buildResolvers(options),
       plugins: buildPlugins(options),
       entry: options.paths.entry,
       output: {
          path: options.paths.output,
-         filename: "bundle.js",
+         filename: "main.[contenthash].js",
          clean: true,
          publicPath: "/",
       },
@@ -26,6 +26,9 @@ export function buildWebpack(options: BuildOptions): webpack.Configuration {
       devServer: isDev ? buildDevServer(options) : undefined,
       watchOptions: {
          ignored: /node_modules/,
+      },
+      optimization: {
+         usedExports: true,
       },
    }
 }
