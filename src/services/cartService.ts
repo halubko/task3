@@ -4,7 +4,7 @@ import {
    IDefaultCartUserResponse,
    IGetCartByUserIdResponse,
 } from "../models/responses/ICartRespones"
-import { IAddCartPayload } from "../models/payloads/ICartPayloads"
+import { IAddCartPayload, IUpdateCartPayload } from "../models/payloads/ICartPayloads"
 import { baseQueryWithReauth } from "./index"
 
 export const cartAPI = createApi({
@@ -29,6 +29,13 @@ export const cartAPI = createApi({
             url: "/carts/add",
             method: "POST",
             body,
+         }),
+      }),
+      updateCart: build.mutation<ICartResponse, IUpdateCartPayload>({
+         query: ({ cartId, products, merge }) => ({
+            url: `/carts/${cartId}`,
+            method: "PUT",
+            body: { merge, products },
          }),
       }),
    }),
