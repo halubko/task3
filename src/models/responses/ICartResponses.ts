@@ -1,8 +1,8 @@
-import { ICart } from "../ICart"
+import { ICartProduct } from "../ICart"
 
 export interface ICartResponse {
    id: number
-   products: ICart[]
+   products: ICartProduct[]
    total: number
    totalQuantity: number
    totalProducts: number
