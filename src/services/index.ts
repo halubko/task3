@@ -35,7 +35,11 @@ export const baseQueryWithReauth: BaseQueryFn<
          {
             url: "/auth/refresh",
             method: "POST",
-            body: { refreshToken: currentRefreshToken },
+            body: {
+               refreshToken: currentRefreshToken,
+            },
+            //DummyJSON don't allow to use cookie to set refreshToken thet why it's in local storage
+            //credentials: 'include',
          },
          store,
          extraOptions
