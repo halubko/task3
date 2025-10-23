@@ -9,7 +9,6 @@ import ProductsPage from "./pages/ProductsPage"
 import AuthLayout from "./layouts/AuthLayout"
 import MainLayout from "./layouts/MainLayout"
 import ProductPage from "./pages/ProductPage"
-import ProtectedRoutes from "./utils/ProtectedRoutes"
 import CartPage from "./pages/CartPage"
 
 const root = document.getElementById("root")
@@ -40,14 +39,6 @@ const router = createBrowserRouter([
                { path: "products", Component: ProductsPage },
                { path: "products/:id", Component: ProductPage },
                { path: "cart", Component: CartPage },
-            ],
-         },
-         {
-            Component: ProtectedRoutes,
-            children: [
-               {
-                  path: "checkout",
-               },
             ],
          },
       ],
