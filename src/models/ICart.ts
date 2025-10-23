@@ -1,12 +1,6 @@
-export interface ICart {
+export interface ICartProduct {
    id: number
    title: string
    price: number
-   quantity: number
-   total: number
-}
-
-export interface ICartProduct {
-   id: number
    quantity: number
 }

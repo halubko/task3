@@ -12,27 +12,30 @@ const CartPage = () => {
    const navigate = useNavigate()
    const dispatch = useAppDispatch()
    const userId = useAppSelector((state) => state.auth.user?.id)
+   const isAuth = useAppSelector((state) => state.auth?.isAuthenticated)
    const products = useAppSelector((state) => state.cart.products)
    const [updateCart, { data: cartData, isLoading }] = cartAPI.useUpdateCartMutation()
 
    useEffect(() => {
-      const saveAndRefreshCart = async () => {
-         try {
-            const result = await updateCart({
-               cartId: userId,
-               products: products,
-               merge: true,
-            }).unwrap()
-            dispatch(refreshCart({ products: result.products }))
-         } catch (error) {
-            console.error("Failed to merge and refresh cart:", error)
+      if (isAuth) {
+         const saveAndRefreshCart = async () => {
+            try {
+               const result = await updateCart({
+                  cartId: userId,
+                  products: products,
+                  merge: true,
+               }).unwrap()
+               dispatch(refreshCart({ products: result.products }))
+            } catch (error) {
+               alert(error)
+            }
          }
-      }
 
-      if (userId) {
-         void saveAndRefreshCart()
-      } else {
-         void navigate("/auth/login")
+         if (userId) {
+            void saveAndRefreshCart()
+         } else {
+            void navigate("/auth/login")
+         }
       }
    }, [userId])
 
@@ -95,7 +98,7 @@ const CartPage = () => {
                         <TotalCard
                            totalPrice={cartData && cartData.total}
                            isLoading={isLoading}
-                           onOrder={() => void console.log("Order sent")}
+                           onOrder={() => void alert("Order sent")}
                         />
                      </Box>
                   </Grid>

@@ -3,7 +3,7 @@ import {
    ICartResponse,
    IDefaultCartUserResponse,
    IGetCartByUserIdResponse,
-} from "../models/responses/ICartRespones"
+} from "../models/responses/ICartResponses"
 import { IAddCartPayload, IUpdateCartPayload } from "../models/payloads/ICartPayloads"
 import { baseQueryWithReauth } from "./index"
 

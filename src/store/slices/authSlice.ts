@@ -28,7 +28,6 @@ export const authSlice = createSlice({
          state.refreshToken = action.payload.refreshToken
          localStorage.setItem("accessToken", action.payload.accessToken)
          localStorage.setItem("refreshToken", action.payload.refreshToken)
-         state.isAuthenticated = true
       },
       authTokenChange: (
          state,
@@ -48,7 +47,10 @@ export const authSlice = createSlice({
          localStorage.removeItem("refreshToken")
          state.isAuthenticated = false
       },
+      handleIsAuthenticated: (state: AuthState) => {
+         state.isAuthenticated = !state.isAuthenticated
+      },
    },
 })
 
-export const { setUser, authTokenChange, logoutUser } = authSlice.actions
+export const { setUser, authTokenChange, logoutUser, handleIsAuthenticated } = authSlice.actions

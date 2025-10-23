@@ -2,13 +2,14 @@ import React, { useEffect } from "react"
 import { Outlet } from "react-router-dom"
 import { authAPI } from "./services/authService"
 import { useAppDispatch } from "./hooks/redux"
-import { setUser } from "./store/slices/authSlice"
+import { handleIsAuthenticated, setUser } from "./store/slices/authSlice"
 import { IUser } from "./models/IUser"
 import { cartAPI } from "./services/cartService"
 import { addCart } from "./store/slices/cartSlice"
+import { CircularProgress } from "@mui/material"
 
 export function App() {
-   const { data: userData } = authAPI.useCheckAuthQuery()
+   const { data: userData, isLoading } = authAPI.useCheckAuthQuery()
 
    //Not working at DummyJSON at all, but logic is the next:
    //When initializing the application, we check auth and automatically load the cart by userId
@@ -24,17 +25,31 @@ export function App() {
                refreshToken: localStorage.getItem("refreshToken"),
             })
          )
+         dispatch(handleIsAuthenticated())
       }
 
       //DummyJSON do not allow to send empty array to server
-   }, [userData])
+   }, [userData, dispatch])
 
    useEffect(() => {
       if (cartData) {
-         console.log("cartData", cartData)
          dispatch(addCart({ cartId: cartData.id, products: cartData.products }))
       }
-   }, [cartData])
+   }, [cartData, dispatch])
+
+   // if (userData) {
+   //    dispatch(
+   //       setUser({
+   //          user: { id: userData.id, username: userData.username } as IUser,
+   //          accessToken: localStorage.getItem("accessToken"),
+   //          refreshToken: localStorage.getItem("refreshToken"),
+   //       })
+   //    )
+   // }
+
+   if (isLoading) {
+      return <CircularProgress color="primary" sx={{ display: "block", margin: "auto" }} />
+   }
 
    return <Outlet />
 }
