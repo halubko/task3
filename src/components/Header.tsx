@@ -2,7 +2,8 @@ import React, { useMemo } from "react"
 import { AppBar, Badge, Box, IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material"
 import { ShoppingBasket, AccountCircle, Logout, MoreHoriz, Login } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
-import { useAppSelector } from "../hooks/redux"
+import { useAppDispatch, useAppSelector } from "../hooks/redux"
+import { logoutUser } from "../store/slices/authSlice"
 
 const Header = () => {
    const navigate = useNavigate()
@@ -10,6 +11,7 @@ const Header = () => {
    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null)
    const cartItems = useAppSelector((state) => state.cart.products)
    const isAuth = useAppSelector((state) => state.auth.isAuthenticated)
+   const dispatch = useAppDispatch()
 
    const isMenuOpen = Boolean(anchorEl)
    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
@@ -35,6 +37,15 @@ const Header = () => {
       return cartItems?.length
    }, [cartItems])
 
+   const handleAuth = () => {
+      if (isAuth) {
+         handleMenuClose()
+         dispatch(logoutUser())
+      } else {
+         void navigate("/auth/login")
+      }
+   }
+
    const menuId = "primary-search-account-menu"
    const renderMenu = (
       <Menu
@@ -52,15 +63,7 @@ const Header = () => {
          open={isMenuOpen}
          onClose={handleMenuClose}
       >
-         <MenuItem
-            onClick={() => {
-               handleMenuClose()
-               localStorage.removeItem("accessToken")
-               void navigate("/auth/login")
-            }}
-         >
-            {isAuth ? "Logout" : "Login"}
-         </MenuItem>
+         <MenuItem onClick={handleAuth}>{isAuth ? "Logout" : "Login"}</MenuItem>
       </Menu>
    )
 
