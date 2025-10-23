@@ -1,49 +1,67 @@
 import React, { FC } from "react"
-import { Box, Button, Typography } from "@mui/material"
+import { Box, Button, Card, CircularProgress, Divider, Typography } from "@mui/material"
 
 interface TotalCardProps {
    totalPrice: number
+   isLoading: boolean
    onOrder: () => void
 }
 
-const TotalCard: FC<TotalCardProps> = ({ totalPrice, onOrder }) => {
+const TotalCard: FC<TotalCardProps> = ({ totalPrice, onOrder, isLoading }) => {
    return (
-      <Box
+      <Card
+         variant="outlined"
          sx={{
-            minWidth: 250,
-            maxWidth: 350,
-            border: "1px solid",
-            borderRadius: "8px",
-            borderColor: "primary.main",
-            padding: "16px",
-            ml: { md: 3, xs: 0 },
-            mt: { xs: 3, md: 0 },
+            p: 3,
+            borderRadius: "12px",
             boxShadow: 3,
-            alignSelf: "flex-start",
+            bgcolor: "background.paper",
+            width: "100%",
          }}
       >
+         <Typography variant="h6" component="h2" gutterBottom fontWeight="bold">
+            Order Summary
+         </Typography>
+
+         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Typography variant="body1" color="text.secondary">
+               Delivery:
+            </Typography>
+            <Typography variant="body1" color="success.main" fontWeight="medium">
+               Free
+            </Typography>
+         </Box>
+
+         <Divider sx={{ mb: 2 }} />
+
          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-            <Typography variant="h5" component="p">
+            <Typography variant="h5" component="p" fontWeight="bold">
                Total to be paid:
             </Typography>
-            <Typography variant="h5" component="p" color="primary" fontWeight="bold">
-               ${totalPrice}
-            </Typography>
+            {isLoading ? (
+               <CircularProgress color="primary" sx={{ display: "block", margin: "auto" }} />
+            ) : (
+               <Typography variant="h5" component="p" color="primary" fontWeight="bold">
+                  ${totalPrice && totalPrice.toFixed(2)}
+               </Typography>
+            )}
          </Box>
 
          <Button
             variant="contained"
             color="primary"
             fullWidth
-            onClick={() => void onOrder()}
+            onClick={onOrder}
             sx={{
                paddingY: 1.5,
-               fontSize: "1rem",
+               fontSize: "1.1rem",
+               borderRadius: "8px",
+               textTransform: "none",
             }}
          >
-            Place an order
+            Proceed to Checkout
          </Button>
-      </Box>
+      </Card>
    )
 }
 

@@ -1,72 +1,107 @@
-import React from "react"
-import { Box, CircularProgress, Grid, IconButton, Paper, Typography } from "@mui/material"
+import React, { useEffect } from "react"
+import { Box, Grid, IconButton, Stack, Typography } from "@mui/material"
 import TotalCard from "../components/cart/TotalCard"
 import CartItemCard from "../components/cart/CartItemCard"
 import { cartAPI } from "../services/cartService"
-import { useAppSelector } from "../hooks/redux"
+import { useAppDispatch, useAppSelector } from "../hooks/redux"
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
 import { useNavigate } from "react-router-dom"
+import { refreshCart } from "../store/slices/cartSlice"
 
 const CartPage = () => {
-   const cartId = useAppSelector((state) => state.cart.id)
-   console.log("ID: " + cartId)
-   const { data: cartItems, isLoading } = cartAPI.useGetCartByIdQuery(cartId)
    const navigate = useNavigate()
+   const dispatch = useAppDispatch()
+   const userId = useAppSelector((state) => state.auth.user?.id)
+   const products = useAppSelector((state) => state.cart.products)
+   const [updateCart, { data: cartData, isLoading }] = cartAPI.useUpdateCartMutation()
+
+   useEffect(() => {
+      const saveAndRefreshCart = async () => {
+         try {
+            const result = await updateCart({
+               cartId: userId,
+               products: products,
+               merge: true,
+            }).unwrap()
+            dispatch(refreshCart({ products: result.products }))
+         } catch (error) {
+            console.error("Failed to merge and refresh cart:", error)
+         }
+      }
+
+      if (userId) {
+         void saveAndRefreshCart()
+      } else {
+         void navigate("/auth/login")
+      }
+   }, [userId])
+
+   useEffect(() => {
+      if (!userId) {
+         return
+      }
+      if (userId) {
+         void updateCart({ cartId: userId, products: products })
+      }
+   }, [products, userId])
 
    return (
-      <Box sx={{ minHeight: "100vh", p: 3, boxSizing: "border-box" }}>
-         <Paper
-            elevation={3}
-            sx={{ flexGrow: 1, width: "100%", height: "100%", p: 6, boxSizing: "border-box" }}
-         >
-            <IconButton
-               onClick={() => {
-                  void navigate(-1)
-               }}
-               aria-label="back"
-               size="small"
-            >
-               <ArrowBackIosNewIcon />
-            </IconButton>
-            <Typography
-               variant="h3"
-               component="h1"
-               gutterBottom
-               sx={{ mb: 4, textAlign: "center", color: "primary" }}
-            >
-               My cart
-            </Typography>
-
-            {isLoading ? (
-               <CircularProgress color="primary" sx={{ display: "block", margin: "auto" }} />
-            ) : cartItems.products.length === 0 ? (
-               <Typography variant="h6" color="text.secondary">
-                  Cart is empty
-               </Typography>
-            ) : (
-               <Grid
-                  container
-                  spacing={4}
-                  direction={{ xs: "column", md: "row" }}
-                  justifyContent={"center"}
+      <Box
+         sx={{
+            p: { xs: 2, md: 4 },
+            boxSizing: "border-box",
+         }}
+      >
+         <Stack spacing={4}>
+            <Box display="flex" alignItems="center" mb={2}>
+               <IconButton
+                  onClick={() => {
+                     void navigate(-1)
+                  }}
+                  aria-label="back"
+                  size="large"
+                  sx={{ mr: 2 }}
                >
+                  <ArrowBackIosNewIcon />
+               </IconButton>
+               <Typography variant="h4" component="h1" fontWeight="bold" color="primary">
+                  My Shopping Cart
+               </Typography>
+            </Box>
+            {products.length === 0 ? (
+               <Box textAlign="center" py={10}>
+                  <Typography variant="h5" color="text.secondary">
+                     Your cart is currently empty.
+                  </Typography>
+               </Box>
+            ) : (
+               <Grid container spacing={{ xs: 3, md: 6 }} justifyContent="center">
                   <Grid sx={{ xs: 12, md: 8 }}>
-                     <Box display="flex" flexDirection="column" gap={4}>
-                        {cartItems.products.map((product) => (
+                     <Stack spacing={3}>
+                        {products.map((product) => (
                            <CartItemCard key={product.id} item={product} />
                         ))}
-                     </Box>
+                     </Stack>
                   </Grid>
 
                   <Grid sx={{ xs: 12, md: 4 }}>
-                     <TotalCard
-                        totalPrice={cartItems.total}
-                        onOrder={() => void console.log("Complite")}
-                     />
+                     <Box
+                        sx={{
+                           position: { md: "sticky" },
+                           top: { md: 80 },
+                           alignSelf: "flex-start",
+                        }}
+                     >
+                        <TotalCard
+                           totalPrice={cartData && cartData.total}
+                           isLoading={isLoading}
+                           onOrder={() => void console.log("Order sent")}
+                        />
+                     </Box>
                   </Grid>
                </Grid>
             )}
-         </Paper>
+         </Stack>
       </Box>
    )
 }
