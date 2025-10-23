@@ -89,7 +89,7 @@ const ProductPage = () => {
                            variant="contained"
                            color="primary"
                            startIcon={<AddShoppingCartIcon />}
-                           onClick={() => handleAddToCart()}
+                           onClick={() => handleAddToCart(data.price, data.title)}
                         >
                            Add to cart
                         </Button>
