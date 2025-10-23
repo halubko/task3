@@ -3,13 +3,14 @@ import { Box, CircularProgress, Container } from "@mui/material"
 import AuthForm from "../components/auth/AuthForm"
 import AuthError from "../components/auth/AuthError"
 import { authAPI } from "../services/authService"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useAppDispatch } from "../hooks/redux"
 import { setUser } from "../store/slices/authSlice"
 
-const LoginPage = () => {
+const AuthPage = () => {
    const [loginUser, { data, error, isLoading, isSuccess }] = authAPI.useLoginUserMutation()
    const navigate = useNavigate()
+   const location = useLocation()
    const dispatch = useAppDispatch()
 
    useEffect(() => {
@@ -21,7 +22,7 @@ const LoginPage = () => {
                refreshToken: data.refreshToken,
             })
          )
-         void navigate("/main/products")
+         void navigate(-1)
       }
    }, [isSuccess])
 
@@ -40,12 +41,14 @@ const LoginPage = () => {
          <Box sx={{ width: "100%" }}>
             {isLoading ? (
                <CircularProgress color="primary" sx={{ display: "block", margin: "auto" }} />
-            ) : (
+            ) : location.pathname === "/auth/login" ? (
                <AuthForm mode="login" onLogin={loginUser} />
+            ) : (
+               <AuthForm mode="signup" onLogin={loginUser} userId={data?.id} />
             )}
          </Box>
       </Container>
    )
 }
 
-export default LoginPage
+export default AuthPage

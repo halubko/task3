@@ -2,13 +2,16 @@ import React, { useEffect } from "react"
 import { Alert, alpha, Box, Button, Link as MuiLink, TextField, Typography } from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
 import { authAPI } from "../../services/authService"
+import { cartAPI } from "../../services/cartService"
+import { useAppSelector } from "../../hooks/redux"
 
 interface LoginFormProps {
    mode: "login" | "signup"
-   onLogin: ReturnType<typeof authAPI.useLoginUserMutation>[0]
+   onLogin?: ReturnType<typeof authAPI.useLoginUserMutation>[0]
+   userId?: number
 }
 
-const AuthForm = ({ mode, onLogin }: LoginFormProps) => {
+const AuthForm = ({ mode, onLogin, userId }: LoginFormProps) => {
    const [email, setEmail] = React.useState("")
    const [password, setPassword] = React.useState("")
    const [emailDirty, setEmailDirty] = React.useState(false)
@@ -16,6 +19,8 @@ const AuthForm = ({ mode, onLogin }: LoginFormProps) => {
    const [emailError, setEmailError] = React.useState("Email is required")
    const [passwordError, setPasswordErrors] = React.useState("Password is required")
    const [formValid, setFormValid] = React.useState(false)
+   const [addCart] = cartAPI.useAddCartMutation()
+   const products = useAppSelector((state) => state.cart.products)
 
    useEffect(() => {
       if (emailError || passwordError) {
@@ -72,7 +77,21 @@ const AuthForm = ({ mode, onLogin }: LoginFormProps) => {
 
    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key === "Enter" && formValid) {
+         if (mode === "login") {
+            void onLogin({ username: "emilys", password: "emilyspass" })
+         } else {
+            void onLogin({ username: "emilys", password: "emilyspass" })
+            void addCart({ userId: userId, products: products })
+         }
+      }
+   }
+
+   const handleOnClick = () => {
+      if (mode === "login") {
          void onLogin({ username: "emilys", password: "emilyspass" })
+      } else {
+         void onLogin({ username: "emilys", password: "emilyspass" })
+         void addCart({ userId: userId, products: products })
       }
    }
 
@@ -136,9 +155,7 @@ const AuthForm = ({ mode, onLogin }: LoginFormProps) => {
          <Button
             tabIndex={0}
             variant="outlined"
-            onClick={() => {
-               void onLogin({ username: "emilys", password: "emilyspass" })
-            }}
+            onClick={handleOnClick}
             sx={{
                color: "white",
                borderColor: "white",
