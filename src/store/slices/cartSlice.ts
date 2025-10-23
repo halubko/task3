@@ -16,15 +16,24 @@ export const cartSlice = createSlice({
    name: "cart",
    initialState,
    reducers: {
-      registerCart: (state, action: PayloadAction<{ id: number }>) => {
-         state.id = action.payload.id
+      refreshCart: (state, action: PayloadAction<{ products: ICartProduct[] }>) => {
+         state.products = []
+         action.payload.products.map((product: ICartProduct) => {
+            state.products.push(product)
+         })
       },
       addToCart: (state: CartState, action: PayloadAction<ICartProduct>) => {
          state.products.push(action.payload)
       },
       addCart: (state: CartState, action: PayloadAction<IAddCartPayload>) => {
          state.id = action.payload.cartId
-         state.products = action.payload.products
+         state.products = [...state.products, ...action.payload.products]
+      },
+      removeFromCart: (state: CartState, action: PayloadAction<{ id: number }>) => {
+         const index = state.products.findIndex((product) => product.id === action.payload.id)
+         if (index !== -1) {
+            state.products.splice(index, 1)
+         }
       },
       incrementQuantity: (state: CartState, action: PayloadAction<{ id: number }>) => {
          const index = state.products.findIndex((product) => product.id === action.payload.id)
@@ -44,5 +53,11 @@ export const cartSlice = createSlice({
    },
 })
 
-export const { registerCart, addToCart, addCart, incrementQuantity, decrementQuantity } =
-   cartSlice.actions
+export const {
+   refreshCart,
+   addToCart,
+   addCart,
+   incrementQuantity,
+   decrementQuantity,
+   removeFromCart,
+} = cartSlice.actions
