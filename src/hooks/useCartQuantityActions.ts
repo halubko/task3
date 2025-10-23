@@ -1,5 +1,10 @@
 import { useAppDispatch, useAppSelector } from "./redux"
-import { addToCart, decrementQuantity, incrementQuantity } from "../store/slices/cartSlice"
+import {
+   addToCart,
+   decrementQuantity,
+   incrementQuantity,
+   removeFromCart,
+} from "../store/slices/cartSlice"
 
 export const useCartQuantityActions = (id: number) => {
    const dispatch = useAppDispatch()
@@ -8,8 +13,8 @@ export const useCartQuantityActions = (id: number) => {
       (state) => state.cart.products.find((item) => item.id === id)?.quantity || 0
    )
 
-   const handleAddToCart = () => {
-      dispatch(addToCart({ id, quantity: 1 }))
+   const handleAddToCart = (price: number, title: string) => {
+      dispatch(addToCart({ id, quantity: 1, price, title }))
    }
 
    const handleIncrement = () => {
@@ -19,10 +24,15 @@ export const useCartQuantityActions = (id: number) => {
    const handleDecrement = () => {
       dispatch(decrementQuantity({ id }))
    }
+
+   const handleRemove = () => {
+      dispatch(removeFromCart({ id }))
+   }
    return {
       quantityInCart,
       handleAddToCart,
       handleIncrement,
       handleDecrement,
+      handleRemove,
    }
 }
