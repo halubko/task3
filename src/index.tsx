@@ -2,8 +2,7 @@ import { createRoot } from "react-dom/client"
 import { App } from "./App"
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
 import { createTheme, ThemeProvider } from "@mui/material"
-import LoginPage from "./pages/LoginPage"
-import SignUpPage from "./pages/SignUpPage"
+import AuthPage from "./pages/AuthPage"
 import { Provider } from "react-redux"
 import { setupStore } from "./store/store"
 import ProductsPage from "./pages/ProductsPage"
@@ -30,8 +29,8 @@ const router = createBrowserRouter([
             path: "auth",
             Component: AuthLayout,
             children: [
-               { path: "login", Component: LoginPage },
-               { path: "signup", Component: SignUpPage },
+               { path: "login", Component: AuthPage },
+               { path: "signup", Component: AuthPage },
             ],
          },
          {

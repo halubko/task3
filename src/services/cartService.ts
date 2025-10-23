@@ -2,6 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react"
 import {
    ICartResponse,
    IDefaultCartUserResponse,
+   IDeleteCartResponse,
    IGetCartByUserIdResponse,
 } from "../models/responses/ICartResponses"
 import { IAddCartPayload, IUpdateCartPayload } from "../models/payloads/ICartPayloads"
@@ -21,7 +22,7 @@ export const cartAPI = createApi({
             url: `/carts/user/${id}`,
          }),
          transformResponse: (response: IDefaultCartUserResponse): IGetCartByUserIdResponse => {
-            return response.carts?.[0] ?? null
+            return response.carts[0] ?? null //it works, but this api don't work at dummyjson
          },
       }),
       addCart: build.mutation<ICartResponse, IAddCartPayload>({
@@ -36,6 +37,12 @@ export const cartAPI = createApi({
             url: `/carts/${cartId}`,
             method: "PUT",
             body: { merge, products },
+         }),
+      }),
+      deleteCart: build.mutation<IDeleteCartResponse, number>({
+         query: (cartId: number) => ({
+            url: `/carts/${cartId}`,
+            method: "DELETE",
          }),
       }),
    }),

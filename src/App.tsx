@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { Outlet } from "react-router-dom"
 import { authAPI } from "./services/authService"
 import { useAppDispatch } from "./hooks/redux"
-import { handleIsAuthenticated, setUser } from "./store/slices/authSlice"
+import { setUser } from "./store/slices/authSlice"
 import { IUser } from "./models/IUser"
 import { cartAPI } from "./services/cartService"
 import { addCart } from "./store/slices/cartSlice"
@@ -25,27 +25,14 @@ export function App() {
                refreshToken: localStorage.getItem("refreshToken"),
             })
          )
-         dispatch(handleIsAuthenticated())
       }
-
-      //DummyJSON do not allow to send empty array to server
    }, [userData, dispatch])
 
    useEffect(() => {
       if (cartData) {
-         dispatch(addCart({ cartId: cartData.id, products: cartData.products }))
+         dispatch(addCart({ userId: cartData.id, products: cartData.products }))
       }
-   }, [cartData, dispatch])
-
-   // if (userData) {
-   //    dispatch(
-   //       setUser({
-   //          user: { id: userData.id, username: userData.username } as IUser,
-   //          accessToken: localStorage.getItem("accessToken"),
-   //          refreshToken: localStorage.getItem("refreshToken"),
-   //       })
-   //    )
-   // }
+   }, [cartData])
 
    if (isLoading) {
       return <CircularProgress color="primary" sx={{ display: "block", margin: "auto" }} />

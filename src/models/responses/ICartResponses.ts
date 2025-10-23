@@ -18,3 +18,7 @@ export interface IDefaultCartUserResponse {
    skip: number
    limit: number
 }
+
+export interface IDeleteCartResponse extends ICartResponse {
+   deletedOn: string
+}

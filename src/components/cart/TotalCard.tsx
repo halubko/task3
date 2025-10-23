@@ -1,13 +1,31 @@
 import React, { FC } from "react"
 import { Box, Button, Card, CircularProgress, Divider, Typography } from "@mui/material"
+import { useAppDispatch, useAppSelector } from "../../hooks/redux"
+import { useNavigate } from "react-router-dom"
+import { cartAPI } from "../../services/cartService"
+import { deleteCart } from "../../store/slices/cartSlice"
 
 interface TotalCardProps {
    totalPrice: number
    isLoading: boolean
-   onOrder: () => void
+   onDelete: ReturnType<typeof cartAPI.useDeleteCartMutation>[0]
 }
 
-const TotalCard: FC<TotalCardProps> = ({ totalPrice, onOrder, isLoading }) => {
+const TotalCard: FC<TotalCardProps> = ({ totalPrice, isLoading, onDelete }) => {
+   const isAuth = useAppSelector((state) => state.auth.isAuthenticated)
+   const cartId = useAppSelector((state) => state.cart.id)
+   const dispatch = useAppDispatch()
+   const navigate = useNavigate()
+
+   const handleSubmit = () => {
+      if (isAuth) {
+         alert("Cart sent")
+         void onDelete(cartId)
+         dispatch(deleteCart())
+      } else {
+         void navigate("/auth/login")
+      }
+   }
    return (
       <Card
          variant="outlined"
@@ -51,7 +69,7 @@ const TotalCard: FC<TotalCardProps> = ({ totalPrice, onOrder, isLoading }) => {
             variant="contained"
             color="primary"
             fullWidth
-            onClick={onOrder}
+            onClick={handleSubmit}
             sx={{
                paddingY: 1.5,
                fontSize: "1.1rem",
@@ -59,7 +77,7 @@ const TotalCard: FC<TotalCardProps> = ({ totalPrice, onOrder, isLoading }) => {
                textTransform: "none",
             }}
          >
-            Proceed to Checkout
+            {isAuth ? "Proceed to Checkout" : "Authenticate"}
          </Button>
       </Card>
    )

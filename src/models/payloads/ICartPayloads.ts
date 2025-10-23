@@ -1,10 +1,12 @@
 import { ICartProduct } from "../ICart"
 
 export interface IAddCartPayload {
-   cartId: number
+   userId: number
    products: ICartProduct[]
 }
 
-export interface IUpdateCartPayload extends IAddCartPayload {
+export interface IUpdateCartPayload {
+   cartId: number
+   products: ICartProduct[]
    merge?: boolean
 }

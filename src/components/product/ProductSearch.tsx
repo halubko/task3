@@ -24,7 +24,7 @@ const ProductSearch = () => {
    }
 
    return (
-      <Box sx={{ backgroundColor: "primary"}}>
+      <Box sx={{ backgroundColor: "primary" }}>
          <Box
             sx={(theme) => ({
                position: "relative",

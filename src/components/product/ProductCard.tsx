@@ -92,7 +92,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
                   variant="contained"
                   color="primary"
                   startIcon={<AddShoppingCartIcon />}
-                  onClick={() => handleAddToCart()}
+                  onClick={() => handleAddToCart(product.price, product.title)}
                >
                   Add to cart
                </Button>

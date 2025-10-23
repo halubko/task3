@@ -26,7 +26,7 @@ export const cartSlice = createSlice({
          state.products.push(action.payload)
       },
       addCart: (state: CartState, action: PayloadAction<IAddCartPayload>) => {
-         state.id = action.payload.cartId
+         state.id = action.payload.userId
          state.products = [...state.products, ...action.payload.products]
       },
       removeFromCart: (state: CartState, action: PayloadAction<{ id: number }>) => {
@@ -34,6 +34,10 @@ export const cartSlice = createSlice({
          if (index !== -1) {
             state.products.splice(index, 1)
          }
+      },
+      deleteCart: (state: CartState) => {
+         state.id = null
+         state.products = []
       },
       incrementQuantity: (state: CartState, action: PayloadAction<{ id: number }>) => {
          const index = state.products.findIndex((product) => product.id === action.payload.id)
@@ -60,4 +64,5 @@ export const {
    incrementQuantity,
    decrementQuantity,
    removeFromCart,
+   deleteCart,
 } = cartSlice.actions

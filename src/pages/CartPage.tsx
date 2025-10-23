@@ -7,46 +7,44 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux"
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
 import { useNavigate } from "react-router-dom"
 import { refreshCart } from "../store/slices/cartSlice"
+import { calculateTotalPrice } from "../utils/calculateTotalPrice"
 
 const CartPage = () => {
    const navigate = useNavigate()
    const dispatch = useAppDispatch()
    const userId = useAppSelector((state) => state.auth.user?.id)
-   const isAuth = useAppSelector((state) => state.auth?.isAuthenticated)
    const products = useAppSelector((state) => state.cart.products)
-   const [updateCart, { data: cartData, isLoading }] = cartAPI.useUpdateCartMutation()
+   const [updateCart, { isLoading }] = cartAPI.useUpdateCartMutation()
+   const [deleteCart] = cartAPI.useDeleteCartMutation()
 
    useEffect(() => {
-      if (isAuth) {
-         const saveAndRefreshCart = async () => {
-            try {
-               const result = await updateCart({
-                  cartId: userId,
-                  products: products,
-                  merge: true,
-               }).unwrap()
-               dispatch(refreshCart({ products: result.products }))
-            } catch (error) {
-               alert(error)
-            }
+      const saveAndRefreshCart = async () => {
+         try {
+            const result = await updateCart({
+               cartId: userId,
+               products: products,
+               //Here merge works like get cart by userId, because
+               //getCartByUserId don't works at dummyjson
+               merge: true,
+            }).unwrap()
+            dispatch(refreshCart({ products: result.products }))
+         } catch (error) {
+            alert(error)
          }
+      }
 
-         if (userId) {
-            void saveAndRefreshCart()
-         } else {
-            void navigate("/auth/login")
-         }
+      if (userId) {
+         void saveAndRefreshCart()
       }
    }, [userId])
 
    useEffect(() => {
-      if (!userId) {
-         return
-      }
       if (userId) {
          void updateCart({ cartId: userId, products: products })
       }
    }, [products, userId])
+
+   const totalPrice = calculateTotalPrice(products)
 
    return (
       <Box
@@ -96,9 +94,9 @@ const CartPage = () => {
                         }}
                      >
                         <TotalCard
-                           totalPrice={cartData && cartData.total}
+                           totalPrice={totalPrice}
                            isLoading={isLoading}
-                           onOrder={() => void alert("Order sent")}
+                           onDelete={() => deleteCart(userId)}
                         />
                      </Box>
                   </Grid>
