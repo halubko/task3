@@ -4,17 +4,20 @@ import AuthForm from "../components/auth/AuthForm"
 import AuthError from "../components/auth/AuthError"
 import { authAPI } from "../services/authService"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useAppDispatch } from "../hooks/redux"
+import { useAppDispatch, useAppSelector } from "../hooks/redux"
 import { setUser } from "../store/slices/authSlice"
+import { cartAPI } from "../services/cartService"
 
 const AuthPage = () => {
-   const [loginUser, { data, error, isLoading, isSuccess }] = authAPI.useLoginUserMutation()
+   const [loginUser, { data, error, isLoading }] = authAPI.useLoginUserMutation()
+   const [addCart] = cartAPI.useAddCartMutation()
    const navigate = useNavigate()
    const location = useLocation()
    const dispatch = useAppDispatch()
+   const products = useAppSelector((state) => state.cart.products)
 
    useEffect(() => {
-      if (isSuccess) {
+      if (data) {
          dispatch(
             setUser({
                user: { id: data.id, username: data.username },
@@ -22,9 +25,12 @@ const AuthPage = () => {
                refreshToken: data.refreshToken,
             })
          )
-         void navigate(-1)
+         if (location.pathname === "/auth/signup") {
+            void addCart({ userId: data.id, products: products })
+         }
+         void navigate(sessionStorage.getItem("prevUrl"))
       }
-   }, [isSuccess])
+   }, [data])
 
    return (
       <Container
@@ -44,7 +50,7 @@ const AuthPage = () => {
             ) : location.pathname === "/auth/login" ? (
                <AuthForm mode="login" onLogin={loginUser} />
             ) : (
-               <AuthForm mode="signup" onLogin={loginUser} userId={data?.id} />
+               <AuthForm mode="signup" onLogin={loginUser} />
             )}
          </Box>
       </Container>

@@ -1,7 +1,7 @@
 import React, { FC } from "react"
 import { Box, Button, Card, CircularProgress, Divider, Typography } from "@mui/material"
 import { useAppDispatch, useAppSelector } from "../../hooks/redux"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { cartAPI } from "../../services/cartService"
 import { deleteCart } from "../../store/slices/cartSlice"
 
@@ -16,6 +16,7 @@ const TotalCard: FC<TotalCardProps> = ({ totalPrice, isLoading, onDelete }) => {
    const cartId = useAppSelector((state) => state.cart.id)
    const dispatch = useAppDispatch()
    const navigate = useNavigate()
+   const location = useLocation()
 
    const handleSubmit = () => {
       if (isAuth) {
@@ -23,6 +24,7 @@ const TotalCard: FC<TotalCardProps> = ({ totalPrice, isLoading, onDelete }) => {
          void onDelete(cartId)
          dispatch(deleteCart())
       } else {
+         sessionStorage.setItem("prevUrl", location.pathname)
          void navigate("/auth/login")
       }
    }

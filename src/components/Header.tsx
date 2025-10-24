@@ -42,6 +42,7 @@ const Header = () => {
          handleMenuClose()
          dispatch(logoutUser())
       } else {
+         sessionStorage.setItem("prevUrl", location.pathname)
          void navigate("/auth/login")
       }
    }
