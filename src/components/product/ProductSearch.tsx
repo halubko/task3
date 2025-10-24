@@ -1,13 +1,19 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { alpha, Box, InputBase } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import { useSearchParams } from "react-router-dom"
 
 const ProductSearch = () => {
    const [searchParams, setSearchParams] = useSearchParams()
+   const [value, setValue] = React.useState<string>("")
+
+   useEffect(() => {
+      setValue(searchParams.get("search") || "")
+   }, [searchParams.get("search")])
 
    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newQuery = e.target.value
+      setValue(newQuery)
 
       setSearchParams((prevSearchParams) => {
          const newSearchParams = new URLSearchParams(prevSearchParams)
@@ -54,7 +60,7 @@ const ProductSearch = () => {
 
             <InputBase
                placeholder="Search…"
-               value={searchParams.get("search")}
+               value={value}
                inputProps={{ "aria-label": "search" }}
                onChange={handleSearchChange}
                sx={(theme) => ({

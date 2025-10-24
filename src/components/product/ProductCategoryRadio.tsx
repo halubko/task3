@@ -29,20 +29,20 @@ const ProductCategoryRadio = () => {
          <FormLabel id="demo-radio-buttons-group-label">Category</FormLabel>
          <RadioGroup
             aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue={categoryParams.get("category") || ""}
+            value={categoryParams.get("category") || ""}
             name="radio-buttons-group"
             onChange={handleCategory}
          >
             <FormControlLabel value="" control={<Radio />} label="All" />
             {data &&
-               data.map((category) => 
+               data.map((category) => (
                   <FormControlLabel
                      key={category.name}
                      value={category.slug}
                      control={<Radio />}
                      label={category.name}
                   />
-               )}
+               ))}
          </RadioGroup>
       </FormControl>
    )
