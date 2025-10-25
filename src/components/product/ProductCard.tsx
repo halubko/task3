@@ -34,12 +34,6 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
                md: "row",
             },
             justifyContent: "center",
-            "& .MuiCardMedia-root": {
-               minWidth: { xs: "100px", md: "200px" },
-               maxWidth: { xs: "300px", md: "300px" },
-               objectFit: "cover",
-               cursor: "pointer",
-            },
          }}
       >
          <Box
@@ -51,7 +45,15 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
                component="img"
                image={product.images[0]}
                alt={product.title}
-               loading="lazy"
+               fetchPriority="high"
+               sx={{
+                  minWidth: { xs: "100px", md: "200px" },
+                  maxWidth: { xs: "300px", md: "300px" },
+                  objectFit: "cover",
+                  cursor: "pointer",
+                  aspectRatio: "1 / 1",
+                  height: "auto",
+               }}
                onClick={() => {
                   void navigate(`/main/products/${product.id}`)
                }}

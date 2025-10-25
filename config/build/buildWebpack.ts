@@ -22,7 +22,7 @@ export function buildWebpack(options: BuildOptions): webpack.Configuration {
          clean: true,
          publicPath: "/",
       },
-      devtool: isDev && "inline-source-map",
+      devtool: isDev ? "inline-source-map" : "source-map",
       devServer: isDev ? buildDevServer(options) : undefined,
       watchOptions: {
          ignored: /node_modules/,

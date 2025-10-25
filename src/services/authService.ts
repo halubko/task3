@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react"
-import { ILoginResponse, IRefreshResponse } from "../models/responses/IAuthResponses"
-import { ILoginPayload, IRefreshPayload } from "../models/payloads/IAuthPayloads"
+import { ILoginResponse } from "../models/responses/IAuthResponses"
+import { ILoginPayload } from "../models/payloads/IAuthPayloads"
 import { baseQueryWithReauth } from "./index"
 
 export const authAPI = createApi({
@@ -10,13 +10,6 @@ export const authAPI = createApi({
       loginUser: build.mutation<ILoginResponse, ILoginPayload>({
          query: (body) => ({
             url: `/auth/login`,
-            method: "POST",
-            body,
-         }),
-      }),
-      refreshToken: build.mutation<IRefreshResponse, IRefreshPayload>({
-         query: (body) => ({
-            url: `/auth/refresh`,
             method: "POST",
             body,
          }),

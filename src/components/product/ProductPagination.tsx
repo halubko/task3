@@ -33,6 +33,10 @@ const ProductPagination: FC<IProductPaginationProps> = ({
                xs: 2,
                sm: 5,
             },
+            minHeight: {
+               xs: 48,
+               sm: 48,
+            },
             padding: {
                xs: 1,
                sm: 0,
