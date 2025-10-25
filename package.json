@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/halubko/task3/issues"
   },
-  "homepage": "https://github.com/halubko/task3#readme",
+  "homepage": "https://halubko.github.io/task3",
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
