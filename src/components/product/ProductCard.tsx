@@ -91,7 +91,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             </CardContent>
          </Box>
 
-         <CardContent
+         <Box
             sx={{
                display: "flex",
                flexDirection: "column",
@@ -99,14 +99,15 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
                   xs: "stretch",
                   md: "center",
                },
+               p: 1,
             }}
          >
-            <Box sx={{ mt: 1.5 }}>
+            <CardContent sx={{ mt: 1.5, p: 1 }}>
                <Typography variant="h5" color="primary" component="p" fontWeight="bold" noWrap>
                   {product.price} $
                </Typography>
-            </Box>
-            <CardActions sx={{ justifyContent: "center", alignItems: "center", width: "100%" }}>
+            </CardContent>
+            <CardActions sx={{ justifyContent: "center", alignItems: "center", p: 1 }}>
                {quantityInCart > 0 ? (
                   <QuantityChanger id={product.id} />
                ) : (
@@ -122,7 +123,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
                   </Button>
                )}
             </CardActions>
-         </CardContent>
+         </Box>
       </Card>
    )
 }

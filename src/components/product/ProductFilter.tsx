@@ -67,15 +67,15 @@ const ProductFilter = () => {
                            alignItems: "start",
                            gap: 1,
                            width: "fit-content",
+                           maxHeight: "100vh",
                            p: 1,
-                           maxHeight: "80vh",
                            overflowY: "auto",
                         }}
                      >
                         <ProductCategoryRadio />
                      </Box>
                      <Button
-                        sx={{ bgcolor: "red", height: "64px", color: "white" }}
+                        sx={{ bgcolor: "red", height: "64px", color: "white", borderRadius: 0 }}
                         onClick={() => setOpen(false)}
                      >
                         <CloseIcon />
