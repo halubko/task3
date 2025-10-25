@@ -33,12 +33,12 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
                xs: "column",
                md: "row",
             },
-            justifyContent: "center",
+            justifyContent: { xs: "center", md: "space-between" },
          }}
       >
          <Box
             display="flex"
-            alignItems={{ xs: "center", sm: "flex-start" }}
+            alignItems={{ xs: "center", md: "flex-start", sm: "flex-start" }}
             flexDirection={{ xs: "column", sm: "row" }}
          >
             <CardMedia
