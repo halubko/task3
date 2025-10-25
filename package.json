@@ -9,7 +9,8 @@
     "start": "webpack serve",
     "prepare": "husky install",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -51,6 +52,7 @@
     "eslint-plugin-react-hooks": "7.0.0",
     "eslint-webpack-plugin": "^5.0.2",
     "fork-ts-checker-webpack-plugin": "^9.1.0",
+    "gh-pages": "^6.3.0",
     "html-webpack-plugin": "^5.6.4",
     "husky": "^9.1.7",
     "jiti": "^2.6.1",
