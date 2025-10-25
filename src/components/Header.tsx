@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { AppBar, Badge, Box, IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material"
 import { ShoppingBasket, AccountCircle, Logout, MoreHoriz, Login } from "@mui/icons-material"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../hooks/redux"
 import { logoutUser } from "../store/slices/authSlice"
 
@@ -12,6 +12,7 @@ const Header = () => {
    const cartItems = useAppSelector((state) => state.cart.products)
    const isAuth = useAppSelector((state) => state.auth.isAuthenticated)
    const dispatch = useAppDispatch()
+   const location = useLocation()
 
    const isMenuOpen = Boolean(anchorEl)
    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
