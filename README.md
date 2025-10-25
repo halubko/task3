@@ -14,4 +14,4 @@
     * Режим Development:  `npm run dev`
     * Запустить сервер для разработки: `npm run start`
 
-## Деплой веб-приложения: 
+## Деплой веб-приложения: https://halubko.github.io/task3/
