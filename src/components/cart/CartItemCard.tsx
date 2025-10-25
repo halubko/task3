@@ -31,9 +31,9 @@ const CartItemCard: FC<CartItemCardProps> = ({ item }) => {
             width={"100%"}
             justifyContent="space-between"
          >
-            <Grid sx={{ xs: 7, sm: 6 }}>
+            <Grid size={{ xs: 7, sm: 6 }}>
                <Stack spacing={0.5}>
-                  <Typography variant="body1" fontWeight="medium" noWrap>
+                  <Typography variant="body1" fontWeight="medium">
                      {item.title}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -52,7 +52,7 @@ const CartItemCard: FC<CartItemCardProps> = ({ item }) => {
                </Stack>
             </Grid>
 
-            <Grid sx={{ xs: 3, sm: 4 }}>
+            <Grid size={{ xs: 3, sm: 6 }}>
                <Stack
                   direction={{ xs: "column", md: "row" }}
                   spacing={2}
@@ -80,7 +80,7 @@ const CartItemCard: FC<CartItemCardProps> = ({ item }) => {
                      onClick={() => handleRemove()}
                      color="error"
                      size="small"
-                     sx={{ ml: { xs: 0, md: 2 } }}
+                     sx={{ ml: { xs: 2, md: 2 } }}
                   >
                      <DeleteIcon fontSize="small" />
                   </IconButton>
