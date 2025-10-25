@@ -7,14 +7,13 @@ import {
    CardActions,
    CardContent,
    CardMedia,
-   IconButton,
+   Rating,
    Typography,
 } from "@mui/material"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import { useNavigate } from "react-router-dom"
-import RemoveIcon from "@mui/icons-material/Remove"
-import AddIcon from "@mui/icons-material/Add"
 import { useCartQuantityActions } from "../../hooks/useCartQuantityActions"
+import QuantityChanger from "../QuantityChanger"
 
 interface ProductCardProps {
    product: IProduct
@@ -22,82 +21,106 @@ interface ProductCardProps {
 
 const ProductCard: FC<ProductCardProps> = ({ product }) => {
    const navigate = useNavigate()
-   const { quantityInCart, handleAddToCart, handleIncrement, handleDecrement } =
-      useCartQuantityActions(product.id)
+   const { quantityInCart, handleAddToCart } = useCartQuantityActions(product.id)
 
    return (
-      <Card sx={{ maxWidth: 345, margin: 2, boxShadow: 3 }}>
-         <CardMedia
-            component="img"
-            height="auto"
-            image={product.images[0]}
-            alt={product.title}
-            sx={{ objectFit: "cover", cursor: "pointer" }}
-            loading="lazy"
-            onClick={() => {
-               void navigate(`/main/products/${product.id}`)
-            }}
-         />
-
-         <CardContent
-            onClick={() => {
-               void navigate(`/main/products/${product.id}`)
-            }}
-            sx={{ cursor: "pointer" }}
+      <Card
+         sx={{
+            width: "100%",
+            boxShadow: 3,
+            display: "flex",
+            flexDirection: {
+               xs: "column",
+               md: "row",
+            },
+            justifyContent: "center",
+            "& .MuiCardMedia-root": {
+               minWidth: { xs: "100px", md: "200px" },
+               maxWidth: { xs: "300px", md: "300px" },
+               objectFit: "cover",
+               cursor: "pointer",
+            },
+         }}
+      >
+         <Box
+            display="flex"
+            alignItems={{ xs: "center", sm: "flex-start" }}
+            flexDirection={{ xs: "column", sm: "row" }}
          >
-            <Typography gutterBottom variant="h6" component="div" noWrap>
-               {product.title}
-            </Typography>
+            <CardMedia
+               component="img"
+               image={product.images[0]}
+               alt={product.title}
+               loading="lazy"
+               onClick={() => {
+                  void navigate(`/main/products/${product.id}`)
+               }}
+            />
 
-            <Typography
-               variant="body2"
-               color="text.secondary"
+            <CardContent
+               onClick={() => {
+                  void navigate(`/main/products/${product.id}`)
+               }}
                sx={{
-                  height: 40,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                  flexGrow: 1,
                }}
             >
-               {product.description}
-            </Typography>
+               <Typography gutterBottom variant="h6" component="div">
+                  {product.title}
+               </Typography>
 
+               <Typography variant="body2" color="text.secondary">
+                  {product.description}
+               </Typography>
+
+               <Rating
+                  value={product.rating}
+                  disabled
+                  sx={{
+                     "&.Mui-disabled": {
+                        opacity: 1,
+                     },
+                  }}
+               />
+            </CardContent>
+         </Box>
+
+         <CardContent
+            sx={{
+               display: "flex",
+               flexDirection: "column",
+               alignItems: {
+                  xs: "stretch",
+                  md: "center",
+               },
+            }}
+         >
             <Box sx={{ mt: 1.5 }}>
-               <Typography variant="h5" color="primary" component="p" fontWeight="bold">
+               <Typography variant="h5" color="primary" component="p" fontWeight="bold" noWrap>
                   {product.price} $
                </Typography>
             </Box>
+            <CardActions sx={{ justifyContent: "center", alignItems: "center", width: "100%" }}>
+               {quantityInCart > 0 ? (
+                  <QuantityChanger id={product.id} />
+               ) : (
+                  <Button
+                     size="small"
+                     variant="contained"
+                     color="primary"
+                     startIcon={<AddShoppingCartIcon />}
+                     onClick={() => handleAddToCart(product.price, product.title)}
+                     fullWidth
+                  >
+                     Add
+                  </Button>
+               )}
+            </CardActions>
          </CardContent>
-
-         <CardActions sx={{ justifyContent: "flex-end", pr: 2, pb: 2 }}>
-            {quantityInCart > 0 ? (
-               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <IconButton size="small" color="primary" onClick={() => handleDecrement()}>
-                     <RemoveIcon />
-                  </IconButton>
-
-                  <Typography variant="body1" component="span">
-                     {quantityInCart}
-                  </Typography>
-
-                  <IconButton size="small" color="primary" onClick={() => handleIncrement()}>
-                     <AddIcon />
-                  </IconButton>
-               </Box>
-            ) : (
-               <Button
-                  size="small"
-                  variant="contained"
-                  color="primary"
-                  startIcon={<AddShoppingCartIcon />}
-                  onClick={() => handleAddToCart(product.price, product.title)}
-               >
-                  Add to cart
-               </Button>
-            )}
-         </CardActions>
       </Card>
    )
 }

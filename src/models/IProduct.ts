@@ -6,5 +6,6 @@ export interface IProduct {
    price: number
    brand: string
    reviews: object
+   rating: number
    images: string[]
 }

@@ -85,20 +85,20 @@ const CartPage = () => {
                      </Stack>
                   </Grid>
 
-                  <Grid sx={{ xs: 12, md: 4 }}>
-                     <Box
-                        sx={{
-                           position: { md: "sticky" },
-                           top: { md: 80 },
-                           alignSelf: "flex-start",
-                        }}
-                     >
-                        <TotalCard
-                           totalPrice={totalPrice}
-                           isLoading={isLoading}
-                           onDelete={() => deleteCart(userId)}
-                        />
-                     </Box>
+                  <Grid
+                     sx={{
+                        xs: 12,
+                        md: 8,
+                        justifyContent: "center",
+                        display: "flex",
+                        height: "fit-content",
+                     }}
+                  >
+                     <TotalCard
+                        totalPrice={totalPrice}
+                        isLoading={isLoading}
+                        onDelete={() => deleteCart(userId)}
+                     />
                   </Grid>
                </Grid>
             )}

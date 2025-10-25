@@ -78,22 +78,26 @@ const ProductsPage = () => {
    const totalPages = data ? getPages(data.total, limit) : 1
 
    return (
-      <Box sx={{ flexGrow: 1 }}>
-         <Box sx={{ display: "flex" }}>
-            <ProductFilter />
+      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+         <Grid container spacing={2} sx={{ mt: 2 }}>
+            <Grid size={{ xs: 12, md: 2 }}>
+               <ProductFilter />
+            </Grid>
             {isLoading ? (
                <CircularProgress color="primary" sx={{ display: "block", margin: "auto" }} />
             ) : (
-               <Grid container sx={{ flexGrow: 1 }}>
-                  {data &&
-                     data.products.map((product) => (
-                        <Grid key={product.id}>
-                           <ProductCard product={product} />
-                        </Grid>
-                     ))}
+               <Grid size={{ xs: 12, md: 10 }}>
+                  <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+                     {data &&
+                        data.products.map((product) => (
+                           <Grid key={product.id} size={12}>
+                              <ProductCard key={product.id} product={product} />
+                           </Grid>
+                        ))}
+                  </Grid>
                </Grid>
             )}
-         </Box>
+         </Grid>
          <ProductPagination
             totalPages={totalPages}
             page={page}

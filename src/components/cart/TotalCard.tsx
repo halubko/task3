@@ -54,7 +54,7 @@ const TotalCard: FC<TotalCardProps> = ({ totalPrice, isLoading, onDelete }) => {
 
          <Divider sx={{ mb: 2 }} />
 
-         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+         <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, mb: 3 }}>
             <Typography variant="h5" component="p" fontWeight="bold">
                Total to be paid:
             </Typography>

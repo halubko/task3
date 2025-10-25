@@ -1,17 +1,16 @@
 import { Box, Card, Grid, IconButton, Stack, Typography } from "@mui/material"
 import React, { FC } from "react"
 import DeleteIcon from "@mui/icons-material/DeleteOutlined"
-import AddIcon from "@mui/icons-material/Add"
-import RemoveIcon from "@mui/icons-material/Remove"
 import { ICartProduct } from "../../models/ICart"
 import { useCartQuantityActions } from "../../hooks/useCartQuantityActions"
+import QuantityChanger from "../QuantityChanger"
 
 interface CartItemCardProps {
    item: ICartProduct
 }
 
 const CartItemCard: FC<CartItemCardProps> = ({ item }) => {
-   const { handleDecrement, handleIncrement, handleRemove } = useCartQuantityActions(item.id)
+   const { handleRemove } = useCartQuantityActions(item.id)
    const totalItemPrice = (item.quantity * item.price).toFixed(2)
 
    return (
@@ -48,19 +47,7 @@ const CartItemCard: FC<CartItemCardProps> = ({ item }) => {
                      <Typography variant="body2" color="text.secondary" mr={1}>
                         Quantity:
                      </Typography>
-                     <IconButton
-                        size="small"
-                        onClick={() => handleIncrement()}
-                        disabled={item.quantity <= 1}
-                     >
-                        <RemoveIcon fontSize="inherit" />
-                     </IconButton>
-                     <Typography sx={{ mx: 1, minWidth: 20, textAlign: "center" }}>
-                        {item.quantity}
-                     </Typography>
-                     <IconButton size="small" onClick={() => handleIncrement()}>
-                        <AddIcon fontSize="inherit" />
-                     </IconButton>
+                     <QuantityChanger id={item.id} />
                   </Box>
                </Stack>
             </Grid>
@@ -77,17 +64,7 @@ const CartItemCard: FC<CartItemCardProps> = ({ item }) => {
                      alignItems="center"
                      sx={{ display: { xs: "none", md: "flex" } }}
                   >
-                     <IconButton
-                        size="small"
-                        onClick={() => handleDecrement()}
-                        disabled={item.quantity <= 1}
-                     >
-                        <RemoveIcon fontSize="small" />
-                     </IconButton>
-                     <Typography sx={{ mx: 1 }}>{item.quantity}</Typography>
-                     <IconButton size="small" onClick={() => handleIncrement()}>
-                        <AddIcon fontSize="small" />
-                     </IconButton>
+                     <QuantityChanger id={item.id} />
                   </Stack>
                   <Typography
                      variant="h6"

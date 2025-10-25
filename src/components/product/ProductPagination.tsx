@@ -23,9 +23,20 @@ const ProductPagination: FC<IProductPaginationProps> = ({
          sx={{
             flexGrow: 1,
             display: "flex",
+            flexDirection: {
+               xs: "column",
+               sm: "row",
+            },
             justifyContent: "center",
             alignItems: "center",
-            gap: 5,
+            gap: {
+               xs: 2,
+               sm: 5,
+            },
+            padding: {
+               xs: 1,
+               sm: 0,
+            },
          }}
       >
          <Pagination
@@ -36,20 +47,39 @@ const ProductPagination: FC<IProductPaginationProps> = ({
                setPage(page)
             }}
             size="large"
+            sx={{
+               "& .MuiPaginationItem-root": {
+                  fontSize: {
+                     xs: "0.7rem",
+                     sm: "0.875rem",
+                     md: "1rem",
+                  },
+                  minWidth: {
+                     xs: 28,
+                     sm: 32,
+                  },
+                  height: {
+                     xs: 28,
+                     sm: 32,
+                  },
+               },
+            }}
             color="primary"
          />
+
          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2 }}>
-            <Typography>Show:</Typography>
+            <Typography variant="body2">Show:</Typography>
             <Select
                labelId="limit-select-label"
                value={limit}
                onChange={(event) => {
-                  setLimit(event.target.value)
+                  setLimit(Number(event.target.value))
                   setPage(1)
                }}
                label="limit"
                size="small"
                variant="standard"
+               sx={{ minWidth: 60 }}
             >
                {limitOptions.map((option: number) => (
                   <MenuItem key={option} value={option}>

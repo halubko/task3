@@ -85,7 +85,7 @@ const Header = () => {
          open={isMobileMenuOpen}
          onClose={handleMobileMenuClose}
       >
-         <MenuItem onClick={() => void navigate("/cart")}>
+         <MenuItem onClick={() => void navigate("/main/cart")}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                <Badge badgeContent={4} color="error">
                   <ShoppingBasket />
@@ -93,7 +93,7 @@ const Header = () => {
             </IconButton>
             <p>Cart</p>
          </MenuItem>
-         <MenuItem onClick={handleProfileMenuOpen}>
+         <MenuItem onClick={handleAuth}>
             <IconButton
                size="large"
                aria-label="account of current user"
@@ -103,7 +103,7 @@ const Header = () => {
             >
                {isAuth ? <Logout /> : <Login />}
             </IconButton>
-            <p>Log out</p>
+            {isAuth ? "Logout" : "Login"}
          </MenuItem>
       </Menu>
    )
@@ -116,7 +116,7 @@ const Header = () => {
                   variant="h6"
                   noWrap
                   component="div"
-                  sx={{ display: { xs: "none", sm: "block" }, cursor: "pointer" }}
+                  sx={{ display: { sm: "block" }, cursor: "pointer" }}
                   onClick={() => {
                      void navigate("/main/products")
                   }}
