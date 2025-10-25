@@ -5,13 +5,17 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin"
 import ESLintWebpackPlugin from "eslint-webpack-plugin"
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin"
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer"
+import path from "path"
 
 export function buildPlugins({ mode, paths }: BuildOptions): Configuration["plugins"] {
    const isDev = mode === "development"
    const isProd = mode === "production"
 
    const plugins: Configuration["plugins"] = [
-      new HtmlWebpackPlugin({ template: paths.html }),
+      new HtmlWebpackPlugin({
+         template: paths.html,
+         favicon: path.resolve(paths.public, "favicon.ico"),
+      }),
       new BundleAnalyzerPlugin(),
    ]
 
