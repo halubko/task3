@@ -88,7 +88,7 @@ const Header = () => {
       >
          <MenuItem onClick={() => void navigate("/main/cart")}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-               <Badge badgeContent={4} color="error">
+               <Badge badgeContent={cartItemCounter} color="error">
                   <ShoppingBasket />
                </Badge>
             </IconButton>
