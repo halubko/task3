@@ -1,5 +1,6 @@
 import React from "react"
 import { Box, Button, Modal } from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
 import ProductCategoryRadio from "./ProductCategoryRadio"
 import ProductSearch from "./ProductSearch"
 import ProductOrder from "./ProductOrder"
@@ -50,17 +51,35 @@ const ProductFilter = () => {
                <Modal open={open} onClose={() => setOpen(false)}>
                   <Box
                      sx={{
-                        bgcolor: "white",
                         borderRadius: 2,
                         display: "flex",
-                        flexDirection: "column",
-                        alignItems: "start",
-                        gap: 1,
                         width: "fit-content",
-                        p: 1,
+                        position: "absolute",
+                        top: "0",
+                        left: "0",
                      }}
                   >
-                     <ProductCategoryRadio />
+                     <Box
+                        sx={{
+                           bgcolor: "white",
+                           display: "flex",
+                           flexDirection: "column",
+                           alignItems: "start",
+                           gap: 1,
+                           width: "fit-content",
+                           p: 1,
+                           maxHeight: "80vh",
+                           overflowY: "auto",
+                        }}
+                     >
+                        <ProductCategoryRadio />
+                     </Box>
+                     <Button
+                        sx={{ bgcolor: "red", height: "64px", color: "white" }}
+                        onClick={() => setOpen(false)}
+                     >
+                        <CloseIcon />
+                     </Button>
                   </Box>
                </Modal>
             </Box>
