@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { Outlet } from "react-router-dom"
 import { authAPI } from "./services/authService"
-import { useAppDispatch } from "./hooks/redux"
+import { useAppDispatch, useAppSelector } from "./hooks/redux"
 import { setUser } from "./store/slices/authSlice"
 import { IUser } from "./models/IUser"
 import { cartAPI } from "./services/cartService"
@@ -14,6 +14,9 @@ export function App() {
    //Not working at DummyJSON at all, but logic is the next:
    //When initializing the application, we check auth and automatically load the cart by userId
    const { data: cartData } = cartAPI.useGetCartByUserIdQuery(userData?.id, { skip: !userData?.id })
+   const [createCart] = cartAPI.useAddCartMutation()
+   const isAuth = useAppSelector((state) => state.auth.isAuthenticated)
+
    const dispatch = useAppDispatch()
 
    useEffect(() => {
@@ -31,6 +34,9 @@ export function App() {
    useEffect(() => {
       if (cartData) {
          dispatch(addCart({ userId: cartData.id, products: cartData.products }))
+      } else if (isAuth) {
+         //DummyJSON don't allow to create cart without products
+         void createCart({ userId: userData.id, products: [] })
       }
    }, [cartData])
 
