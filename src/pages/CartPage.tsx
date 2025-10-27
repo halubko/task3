@@ -77,7 +77,7 @@ const CartPage = () => {
                </Box>
             ) : (
                <Grid container spacing={{ xs: 3, md: 6 }} justifyContent="center">
-                  <Grid sx={{ xs: 12, md: 8 }}>
+                  <Grid size={{ xs: 12, md: 8 }}>
                      <Stack spacing={3}>
                         {products.map((product) => (
                            <CartItemCard key={product.id} item={product} />
@@ -86,9 +86,8 @@ const CartPage = () => {
                   </Grid>
 
                   <Grid
+                     size={{ xs: 12, md: 4 }}
                      sx={{
-                        xs: 12,
-                        md: 8,
                         justifyContent: "center",
                         display: "flex",
                         height: "fit-content",
