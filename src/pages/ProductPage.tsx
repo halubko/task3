@@ -1,11 +1,10 @@
 import React, { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { productsAPI } from "../services/productsService"
+import { useGetProductByIdQuery } from "../services/productsService"
 import {
    Box,
    Button,
    CircularProgress,
-   Container,
    Divider,
    Grid,
    IconButton,
@@ -23,8 +22,10 @@ import QuantityChanger from "../components/QuantityChanger"
 const ProductPage = () => {
    const params = useParams()
    const navigate = useNavigate()
-   const { quantityInCart, handleAddToCart } = useCartQuantityActions(Number(params.id))
-   const { data, isLoading } = productsAPI.useGetProductByIdQuery(Number(params.id))
+   const productId = Number(params.id)
+
+   const { quantityInCart, handleAddToCart } = useCartQuantityActions(productId)
+   const { data: product, isLoading } = useGetProductByIdQuery(productId)
    const [currentIndex, setCurrentIndex] = useState(0)
 
    if (isLoading) {
@@ -35,15 +36,14 @@ const ProductPage = () => {
       )
    }
 
-   const currentImageSrc = data.images[currentIndex]
+   const currentImageSrc =
+      product.images[currentIndex] || (product.images.length > 0 ? product.images[0] : "")
 
    return (
-      <Container maxWidth="lg" sx={{ my: 4 }}>
-         <Paper elevation={3} sx={{ p: 4 }}>
+      <Box sx={{ my: 4 }}>
+         <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 } }}>
             <IconButton
-               onClick={() => {
-                  void navigate(-1)
-               }}
+               onClick={() => void navigate(-1)}
                aria-label="back"
                size="small"
                sx={{ mb: 2 }}
@@ -51,146 +51,159 @@ const ProductPage = () => {
                <ArrowBackIosNewIcon />
             </IconButton>
 
-            <Grid container spacing={4} justifyContent="center">
-               <Grid sx={{ xs: 12 }} justifyContent="center">
-                  <Box
-                     sx={{
-                        width: "100%",
-                        height: 400,
-                        overflow: "hidden",
-                        borderRadius: 2,
-                        mb: 2,
-                        display: "flex",
-                        justifyContent: "center",
-                     }}
-                  >
-                     <img
-                        src={currentImageSrc}
-                        alt={data.title}
-                        style={{
+            <Box>
+               <Grid container>
+                  <Grid size={{ xs: 12, md: 6 }}>
+                     <Box
+                        sx={{
                            width: "100%",
-                           height: "100%",
-                           objectFit: "contain",
-                           transition: "opacity 0.3s",
+                           height: { xs: 300, sm: 400 },
+                           overflow: "hidden",
+                           borderRadius: 2,
+                           mb: 2,
+                           display: "flex",
+                           justifyContent: "center",
+                           alignItems: "center",
                         }}
-                     />
-                  </Box>
-
-                  <ImageList
-                     sx={{
-                        width: "100%",
-                        gridAutoFlow: "column",
-                        gridTemplateColumns: "repeat(auto-fill, minmax(80px, 1fr))",
-                        gridAutoColumns: "minmax(80px, 1fr)",
-                        overflowX: "scroll",
-                        "&::-webkit-scrollbar": {
-                           display: "none",
-                        },
-                     }}
-                     gap={8}
-                  >
-                     {data.images.length <= 1
-                        ? null
-                        : data.images.map((src, index) => (
-                             <ImageListItem
-                                key={index}
-                                onClick={() => setCurrentIndex(index)}
-                                sx={{
-                                   height: "100%",
-                                   cursor: "pointer",
-                                   opacity: index === currentIndex ? 1 : 0.6,
-                                   border:
-                                      index === currentIndex
-                                         ? "2px solid"
-                                         : "2px solid transparent",
-                                   borderColor:
-                                      index === currentIndex ? "primary.main" : "transparent",
-                                   borderRadius: 1,
-                                   transition: "opacity 0.2s, border-color 0.2s",
-                                }}
-                             >
-                                <img
-                                   src={src}
-                                   alt={`Thumbnail ${index + 1}`}
-                                   loading="lazy"
-                                   style={{
-                                      width: "100%",
-                                      height: "100%",
-                                      maxWidth: 200,
-                                      objectFit: "cover",
-                                   }}
-                                />
-                             </ImageListItem>
-                          ))}
-                  </ImageList>
-               </Grid>
-
-               <Grid sx={{ xs: 12 }}>
-                  <Box display="flex" justifyContent="space-between" gap={2}>
-                     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                     >
+                        {currentImageSrc ? (
+                           <img
+                              src={currentImageSrc}
+                              alt={product.title}
+                              style={{
+                                 width: "100%",
+                                 height: "100%",
+                                 objectFit: "contain",
+                                 transition: "opacity 0.3s",
+                              }}
+                           />
+                        ) : (
+                           <Typography variant="body2" color="text.secondary">
+                              No images
+                           </Typography>
+                        )}
+                     </Box>
+                  </Grid>
+                  <Grid size={{ xs: 12, md: 6 }}>
+                     <Box display="flex" flexDirection="column" gap={1}>
                         <Typography
                            variant="h3"
                            component="h1"
-                           gutterBottom
                            sx={{
-                              fontSize: { xs: "1rem", sm: "2rem", md: "3rem" },
+                              fontSize: { xs: "1.5rem", sm: "2.5rem", md: "3rem" },
+                              mb: 1,
                            }}
                         >
-                           {data.title}
+                           {product.title}
                         </Typography>
+
                         <Typography
                            variant="h4"
                            color="primary"
-                           component="h1"
+                           component="h2"
                            fontWeight="bold"
                            sx={{
-                              fontSize: { xs: "1rem", sm: "2rem", md: "3rem" },
+                              fontSize: { xs: "1.5rem", sm: "2rem" },
                            }}
                         >
-                           ${data.price}
+                           ${product.price}
                         </Typography>
 
-                        {quantityInCart > 0 ? (
-                           <QuantityChanger id={data.id} />
-                        ) : (
-                           <Button
-                              size="medium"
-                              variant="contained"
-                              color="primary"
-                              startIcon={<AddShoppingCartIcon />}
-                              onClick={() => handleAddToCart(data.price, data.title)}
-                              sx={{ maxWidth: 200 }}
-                           >
-                              Add to cart
-                           </Button>
-                        )}
-                     </Box>
-                     <Divider orientation="vertical" />
-                     <Box display="flex" flexDirection="column" gap={2}>
+                        <Divider />
+
                         <Box>
                            <Typography variant="h6" component="h2" gutterBottom>
                               Description:
                            </Typography>
-                           <Typography variant="body1" color="text.secondary">
-                              {data.description}
+                           <Typography variant="body1" color="text.secondary" component="h2">
+                              {product.description}
                            </Typography>
                         </Box>
 
-                        <Rating
-                           value={data.rating}
-                           disabled
-                           sx={{
-                              "&.Mui-disabled": {
-                                 opacity: 1,
-                              },
+                        <Divider />
+
+                        <Box>
+                           <Typography variant="subtitle1" component="div" gutterBottom>
+                              Rating:
+                           </Typography>
+                           <Rating
+                              value={product.rating}
+                              precision={0.1}
+                              readOnly
+                              sx={{
+                                 "&.Mui-disabled": {
+                                    opacity: 1,
+                                 },
+                              }}
+                           />
+                        </Box>
+
+                        <Divider />
+
+                        <Box sx={{ pt: 1 }}>
+                           {quantityInCart > 0 ? (
+                              <QuantityChanger id={product.id} />
+                           ) : (
+                              <Button
+                                 size="large"
+                                 variant="contained"
+                                 color="primary"
+                                 startIcon={<AddShoppingCartIcon />}
+                                 onClick={() => handleAddToCart(product.price, product.title)}
+                                 sx={{ width: { xs: "100%", sm: 250 } }}
+                              >
+                                 Add to cart
+                              </Button>
+                           )}
+                        </Box>
+                     </Box>
+                  </Grid>
+               </Grid>
+               <ImageList
+                  sx={{
+                     width: "100%",
+                     display: "flex",
+                     flexWrap: "nowrap",
+                     overflowX: "scroll",
+                     "&::-webkit-scrollbar": {
+                        display: "none",
+                     },
+                  }}
+                  gap={8}
+               >
+                  {product.images.map((src, index) => (
+                     <ImageListItem
+                        key={index}
+                        onClick={() => setCurrentIndex(index)}
+                        sx={{
+                           height: "100%",
+                           width: "fit-content",
+                           cursor: "pointer",
+                           opacity: index === currentIndex ? 1 : 0.7,
+                           border: index === currentIndex ? "2px solid" : "2px solid transparent",
+                           borderColor: "primary.main",
+                           borderRadius: 1,
+                           transition: "opacity 0.2s, border-color 0.2s",
+                           padding: 0.5,
+                        }}
+                     >
+                        <img
+                           src={src}
+                           alt={`Thumbnail ${index + 1}`}
+                           loading="lazy"
+                           style={{
+                              minWidth: "100px",
+                              maxWidth: "300px",
+                              objectFit: "cover",
+                              borderRadius: "4px",
                            }}
                         />
-                     </Box>
-                  </Box>
-               </Grid>
-            </Grid>
+                     </ImageListItem>
+                  ))}
+               </ImageList>
+            </Box>
          </Paper>
-      </Container>
+      </Box>
    )
 }
 
