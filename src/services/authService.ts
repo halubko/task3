@@ -6,18 +6,21 @@ import { baseQueryWithReauth } from "./index"
 export const authAPI = createApi({
    reducerPath: "authAPI",
    baseQuery: baseQueryWithReauth,
-   endpoints: (build) => ({
-      loginUser: build.mutation<ILoginResponse, ILoginPayload>({
+   // eslint-disable-next-line @typescript-eslint/unbound-method
+   endpoints: ({ query, mutation }) => ({
+      loginUser: mutation<ILoginResponse, ILoginPayload>({
          query: (body) => ({
             url: `/auth/login`,
             method: "POST",
             body,
          }),
       }),
-      checkAuth: build.query<ILoginResponse, void>({
+      checkAuth: query<ILoginResponse, void>({
          query: () => ({
             url: "/auth/me",
          }),
       }),
    }),
 })
+
+export const { useLoginUserMutation, useCheckAuthQuery } = authAPI
