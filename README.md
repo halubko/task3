@@ -2,13 +2,10 @@
 
 ## [Task](https://innowise-group.atlassian.net/jira/software/c/projects/JST/boards/390?selectedIssue=JST-2421)
 
---- 
-
 # Brief functionality
 
 Created SPA web-app with using react, RTK (react toolkit), RTK query and MaterialUI.
 An online store was implemented with token-based authentication (with user session preservation), form validation, filtering (and saving parameters in the URL), pagination, and a shopping cart.
----
 
 # How to build the app
 1. **Install dependencies:**  
@@ -19,11 +16,7 @@ An online store was implemented with token-based authentication (with user sessi
    * Development mode: `npm run dev`
    * Start dev server: `npm run start`
 
----
-
 ## [Deploy](https://halubko.github.io/task3/)
-
----
 
 # Dependencies
 ### Prod: 
