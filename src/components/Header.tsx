@@ -5,7 +5,11 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../hooks/redux"
 import { logoutUser } from "../store/slices/authSlice"
 
-const Header = () => {
+interface HeaderProps {
+   styles: React.CSSProperties
+}
+
+const Header = ({ styles }: HeaderProps) => {
    const navigate = useNavigate()
    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -110,7 +114,7 @@ const Header = () => {
    )
 
    return (
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={styles}>
          <AppBar position="static" sx={{ borderRadius: 1 }}>
             <Toolbar>
                <Typography
