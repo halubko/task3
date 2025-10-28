@@ -2,10 +2,12 @@ import React, { useEffect } from "react"
 import { alpha, Box, InputBase } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import { useSearchParams } from "react-router-dom"
+import { useDebounce } from "../../hooks/useDebounce"
 
 const ProductSearch = () => {
    const [searchParams, setSearchParams] = useSearchParams()
    const [value, setValue] = React.useState<string>("")
+   const debouncedValue = useDebounce(value)
 
    useEffect(() => {
       setValue(searchParams.get("search") || "")
@@ -14,12 +16,14 @@ const ProductSearch = () => {
    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newQuery = e.target.value
       setValue(newQuery)
+   }
 
+   useEffect(() => {
       setSearchParams((prevSearchParams) => {
          const newSearchParams = new URLSearchParams(prevSearchParams)
 
-         if (newQuery) {
-            newSearchParams.set("search", newQuery)
+         if (debouncedValue) {
+            newSearchParams.set("search", debouncedValue)
             newSearchParams.delete("category")
          } else {
             newSearchParams.delete("search")
@@ -27,7 +31,7 @@ const ProductSearch = () => {
 
          return newSearchParams
       })
-   }
+   }, [debouncedValue])
 
    return (
       <Box sx={{ backgroundColor: "primary" }}>
