@@ -2,20 +2,21 @@ import React, { useEffect } from "react"
 import { Box, Grid, IconButton, Stack, Typography } from "@mui/material"
 import TotalCard from "../components/cart/TotalCard"
 import CartItemCard from "../components/cart/CartItemCard"
-import { cartAPI } from "../services/cartService"
+import { useDeleteCartMutation, useUpdateCartMutation } from "../services/cartService"
 import { useAppDispatch, useAppSelector } from "../hooks/redux"
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
 import { useNavigate } from "react-router-dom"
 import { refreshCart } from "../store/slices/cartSlice"
 import { calculateTotalPrice } from "../utils/calculateTotalPrice"
+import { toast } from "react-toastify"
 
 const CartPage = () => {
    const navigate = useNavigate()
    const dispatch = useAppDispatch()
    const userId = useAppSelector((state) => state.auth.user?.id)
    const products = useAppSelector((state) => state.cart.products)
-   const [updateCart, { isLoading }] = cartAPI.useUpdateCartMutation()
-   const [deleteCart] = cartAPI.useDeleteCartMutation()
+   const [updateCart, { isLoading }] = useUpdateCartMutation()
+   const [deleteCart] = useDeleteCartMutation()
 
    useEffect(() => {
       const saveAndRefreshCart = async () => {
@@ -24,12 +25,13 @@ const CartPage = () => {
                cartId: userId,
                products: products,
                //Here merge works like get cart by userId, because
-               //getCartByUserId don't works at dummyjson
+               //getCartByUserId don't work at dummyjson
                merge: true,
             }).unwrap()
             dispatch(refreshCart({ products: result.products }))
          } catch (error) {
-            alert(error)
+            const typedError = error as { data: { message: string } }
+            toast.error(typedError.data.message)
          }
       }
 
