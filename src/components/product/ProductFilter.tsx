@@ -1,9 +1,9 @@
 import React from "react"
 import { Box, Button, Modal } from "@mui/material"
-import CloseIcon from "@mui/icons-material/Close"
 import ProductCategoryRadio from "./ProductCategoryRadio"
 import ProductSearch from "./ProductSearch"
 import ProductOrder from "./ProductOrder"
+import { ArrowBack } from "@mui/icons-material"
 
 const ProductFilter = () => {
    const [open, setOpen] = React.useState(false)
@@ -75,10 +75,10 @@ const ProductFilter = () => {
                         <ProductCategoryRadio />
                      </Box>
                      <Button
-                        sx={{ bgcolor: "red", height: "64px", color: "white", borderRadius: 0 }}
+                        sx={{ bgcolor: "grey", height: "48px", color: "white", borderRadius: 0 }}
                         onClick={() => setOpen(false)}
                      >
-                        <CloseIcon />
+                        <ArrowBack />
                      </Button>
                   </Box>
                </Modal>

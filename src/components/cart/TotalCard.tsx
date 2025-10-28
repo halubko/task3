@@ -2,13 +2,13 @@ import React, { FC } from "react"
 import { Box, Button, Card, CircularProgress, Divider, Typography } from "@mui/material"
 import { useAppDispatch, useAppSelector } from "../../hooks/redux"
 import { useLocation, useNavigate } from "react-router-dom"
-import { cartAPI } from "../../services/cartService"
+import { useDeleteCartMutation } from "../../services/cartService"
 import { deleteCart } from "../../store/slices/cartSlice"
 
 interface TotalCardProps {
    totalPrice: number
    isLoading: boolean
-   onDelete: ReturnType<typeof cartAPI.useDeleteCartMutation>[0]
+   onDelete: ReturnType<typeof useDeleteCartMutation>[0]
 }
 
 const TotalCard: FC<TotalCardProps> = ({ totalPrice, isLoading, onDelete }) => {
