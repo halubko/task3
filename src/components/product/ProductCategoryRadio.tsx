@@ -1,10 +1,10 @@
 import React from "react"
-import { FormControlLabel, FormControl, FormLabel, RadioGroup, Radio } from "@mui/material"
-import { productsAPI } from "../../services/productsService"
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material"
+import { useGetProductsCategoriesQuery } from "../../services/productsService"
 import { useSearchParams } from "react-router-dom"
 
 const ProductCategoryRadio = () => {
-   const { data } = productsAPI.useGetProductsCategoriesQuery()
+   const { data } = useGetProductsCategoriesQuery()
    const [categoryParams, setCategoryParams] = useSearchParams()
 
    const handleCategory = (e: React.ChangeEvent<HTMLInputElement>) => {

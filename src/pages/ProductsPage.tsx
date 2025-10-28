@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { productsAPI } from "../services/productsService"
+import {
+   useGetProductsByCategoryQuery,
+   useGetProductsQuery,
+   useGetSearchProductsQuery,
+} from "../services/productsService"
 import { Box, CircularProgress, Grid } from "@mui/material"
 import ProductCard from "../components/product/ProductCard"
 import ProductPagination from "../components/product/ProductPagination"
@@ -12,17 +16,17 @@ const ProductsPage = () => {
    const [limit, setLimit] = useState<number>(10)
    const [skip, setSkip] = useState<number>(0)
    const [page, setPage] = useState<number>(1)
+   const [params] = useSearchParams()
+   const category = params.get("category")
+   const searchQuery = params.get("search")
+   const order = params.get("order")
 
    useEffect(() => {
       setSkip(limit * (page - 1))
    }, [limit, page])
 
-   const [searchParams] = useSearchParams()
-
    const queryParams = useMemo(() => {
-      const sortBy = searchParams.get("sortBy")
-      const order = searchParams.get("order")
-      const searchQuery = searchParams.get("search")
+      const sortBy = params.get("sortBy")
 
       const args: GetProductsParams = {
          limit,
@@ -30,8 +34,8 @@ const ProductsPage = () => {
       }
 
       if (sortBy && order) {
-         args.order = order
          args.sortBy = sortBy
+         args.order = order
       }
 
       if (searchQuery) {
@@ -39,41 +43,39 @@ const ProductsPage = () => {
       }
 
       return args
-   }, [limit, skip, searchParams])
+   }, [limit, skip, params])
 
-   const { data: searchData, isLoading: isSearchLoading } = productsAPI.useGetSearchProductsQuery(
-      queryParams,
+   const { data: searchData, isLoading: isSearchLoading } = useGetSearchProductsQuery(queryParams, {
+      skip: !searchQuery,
+   })
+   const { data: categoryData, isLoading: isCategoryLoading } = useGetProductsByCategoryQuery(
+      { productType: category, params: queryParams },
       {
-         skip: !searchParams.get("search"),
+         skip: !category,
       }
    )
-   const { data: categoryData, isLoading: isCategoryLoading } =
-      productsAPI.useGetProductsByCategoryQuery(
-         { productType: searchParams.get("category"), params: queryParams },
-         {
-            skip: !searchParams.get("category"),
+   const { data: baseData, isLoading: isBaseLoading } = useGetProductsQuery(queryParams, {
+      skip: !!searchQuery || !!category,
+   })
+
+   const { data, isLoading } = useMemo(() => {
+      if (searchQuery) {
+         return {
+            data: searchData,
+            isLoading: isSearchLoading,
          }
-      )
-   const { data: baseData, isLoading: isBaseLoading } = productsAPI.useGetProductsQuery(
-      queryParams,
-      {
-         skip: !!searchParams.get("search") || !!searchParams.get("category"),
+      } else if (category) {
+         return {
+            data: categoryData,
+            isLoading: isCategoryLoading,
+         }
+      } else {
+         return {
+            data: baseData,
+            isLoading: isBaseLoading,
+         }
       }
-   )
-
-   let data
-   let isLoading
-
-   if (searchParams.get("search")) {
-      data = searchData
-      isLoading = isSearchLoading
-   } else if (searchParams.get("category")) {
-      data = categoryData
-      isLoading = isCategoryLoading
-   } else {
-      data = baseData
-      isLoading = isBaseLoading
-   }
+   }, [searchData, baseData, categoryData, category])
 
    const totalPages = data ? getPages(data.total, limit) : 1
 

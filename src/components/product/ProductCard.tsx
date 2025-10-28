@@ -7,6 +7,7 @@ import {
    CardActions,
    CardContent,
    CardMedia,
+   Grid,
    Rating,
    Typography,
 } from "@mui/material"
@@ -23,6 +24,10 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
    const navigate = useNavigate()
    const { quantityInCart, handleAddToCart } = useCartQuantityActions(product.id)
 
+   const handleNavigation = () => {
+      void navigate(`/main/products/${product.id}`)
+   }
+
    return (
       <Card
          sx={{
@@ -38,8 +43,9 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
       >
          <Box
             display="flex"
-            alignItems={{ xs: "center", md: "flex-start", sm: "flex-start" }}
-            flexDirection={{ xs: "column", sm: "row" }}
+            alignItems={{ xs: "center", md: "flex-start" }}
+            flexDirection={{ xs: "column", sm: "row", md: "row" }}
+            flexGrow={1}
          >
             <CardMedia
                component="img"
@@ -55,74 +61,85 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
                   height: "auto",
                }}
                onClick={() => {
-                  void navigate(`/main/products/${product.id}`)
+                  handleNavigation()
                }}
             />
 
             <CardContent
-               onClick={() => {
-                  void navigate(`/main/products/${product.id}`)
-               }}
                sx={{
-                  cursor: "pointer",
+                  flexGrow: 1,
                   display: "flex",
                   flexDirection: "column",
-                  gap: 1,
-                  flexGrow: 1,
+                  justifyContent: "space-between",
+                  boxSizing: "border-box",
+                  height: "100%",
                }}
             >
-               <Typography gutterBottom variant="h6" component="div">
-                  {product.title}
-               </Typography>
-
-               <Typography variant="body2" color="text.secondary">
-                  {product.description}
-               </Typography>
-
-               <Rating
-                  value={product.rating}
-                  disabled
-                  sx={{
-                     "&.Mui-disabled": {
-                        opacity: 1,
-                     },
+               <Grid
+                  container
+                  justifyContent="space-between"
+                  flexGrow={1}
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => {
+                     handleNavigation()
                   }}
-               />
-            </CardContent>
-         </Box>
+               >
+                  <Grid size={{ md: 8 }} display="flex" flexDirection="column" gap={1}>
+                     <Typography gutterBottom variant="h6" component="h1">
+                        {product.title}
+                     </Typography>
 
-         <Box
-            sx={{
-               display: "flex",
-               flexDirection: "column",
-               alignItems: {
-                  xs: "stretch",
-                  md: "center",
-               },
-               p: 1,
-            }}
-         >
-            <CardContent sx={{ mt: 1.5, p: 1 }}>
-               <Typography variant="h5" color="primary" component="p" fontWeight="bold" noWrap>
-                  {product.price} $
-               </Typography>
+                     <Typography variant="body2" color="text.secondary" component="h2">
+                        {product.description}
+                     </Typography>
+
+                     <Rating
+                        value={product.rating}
+                        disabled
+                        sx={{
+                           "&.Mui-disabled": {
+                              opacity: 1,
+                           },
+                        }}
+                     />
+                  </Grid>
+                  <Grid size={{ md: 4 }} justifyContent="flex-end">
+                     <Typography
+                        variant="h5"
+                        color="primary"
+                        component="p"
+                        fontWeight="bold"
+                        noWrap
+                        textAlign="end"
+                     >
+                        {product.price} $
+                     </Typography>
+                  </Grid>
+               </Grid>
+               <CardActions
+                  sx={{
+                     justifyContent: "flex-end",
+                     alignItems: "center",
+                     minHeight: "37px",
+                     p: 0,
+                  }}
+               >
+                  {quantityInCart > 0 ? (
+                     <QuantityChanger id={product.id} />
+                  ) : (
+                     <Button
+                        size="medium"
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddShoppingCartIcon />}
+                        onClick={() => handleAddToCart(product.price, product.title)}
+                        sx={{ width: { xs: "100%", sm: "100%", md: "initial" } }}
+                     >
+                        Add
+                     </Button>
+                  )}
+               </CardActions>
             </CardContent>
-            <CardActions sx={{ justifyContent: "center", alignItems: "center", p: 1 }}>
-               {quantityInCart > 0 ? (
-                  <QuantityChanger id={product.id} />
-               ) : (
-                  <Button
-                     size="small"
-                     variant="contained"
-                     color="primary"
-                     startIcon={<AddShoppingCartIcon />}
-                     onClick={() => handleAddToCart(product.price, product.title)}
-                     fullWidth
-                  >
-                     Add
-                  </Button>
-               )}
-            </CardActions>
          </Box>
       </Card>
    )
