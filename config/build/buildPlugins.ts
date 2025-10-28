@@ -1,7 +1,6 @@
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import { Configuration } from "webpack"
 import { BuildOptions } from "./types/types"
-import MiniCssExtractPlugin from "mini-css-extract-plugin"
 import ESLintWebpackPlugin from "eslint-webpack-plugin"
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin"
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer"
@@ -26,12 +25,6 @@ export function buildPlugins({ mode, paths }: BuildOptions): Configuration["plug
    }
    if (isProd) {
       //For pushing plugins for production env
-      plugins.push(
-         new MiniCssExtractPlugin({
-            filename: "css/[name].[contenthash:8].css",
-            chunkFilename: "css/[name].[contenthash:8].css",
-         })
-      )
    }
 
    return plugins
