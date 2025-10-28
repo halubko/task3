@@ -1,29 +1,42 @@
 import React, { useEffect } from "react"
-import { Alert, alpha, Box, Button, Link as MuiLink, TextField, Typography } from "@mui/material"
-import { Link as RouterLink } from "react-router-dom"
-import { authAPI } from "../../services/authService"
+import {
+   Alert,
+   alpha,
+   Box,
+   Button,
+   IconButton,
+   Link as MuiLink,
+   TextField,
+   Typography,
+} from "@mui/material"
+import { Link as RouterLink, useNavigate } from "react-router-dom"
+import { useLoginUserMutation } from "../../services/authService"
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
 
 interface AuthFormProps {
    mode: "login" | "signup"
-   onLogin?: ReturnType<typeof authAPI.useLoginUserMutation>[0]
+   onLogin?: ReturnType<typeof useLoginUserMutation>[0]
 }
 
 const AuthForm = ({ mode, onLogin }: AuthFormProps) => {
+   const navigate = useNavigate()
    const [email, setEmail] = React.useState("")
    const [password, setPassword] = React.useState("")
+   const [passwordConfirm, setPasswordConfirm] = React.useState("")
    const [emailDirty, setEmailDirty] = React.useState(false)
    const [passwordDirty, setPasswordDirty] = React.useState(false)
+   const [passwordConfirmDirty, setPasswordConfirmDirty] = React.useState(false)
    const [emailError, setEmailError] = React.useState("Email is required")
    const [passwordError, setPasswordErrors] = React.useState("Password is required")
    const [formValid, setFormValid] = React.useState(false)
 
    useEffect(() => {
-      if (emailError || passwordError) {
+      if (emailError || passwordError || passwordConfirmDirty) {
          setFormValid(false)
       } else {
          setFormValid(true)
       }
-   }, [emailError, passwordError])
+   }, [emailError, passwordError, passwordConfirmDirty])
 
    const emailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(e.target.value)
@@ -56,6 +69,17 @@ const AuthForm = ({ mode, onLogin }: AuthFormProps) => {
          setPasswordErrors("Password must have at least 1 symbol")
       } else {
          setPasswordErrors("")
+      }
+   }
+
+   const passwordConfirmHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const passwordConfirm = e.target.value
+      setPasswordConfirm(passwordConfirm)
+
+      if (passwordConfirm !== password) {
+         setPasswordConfirmDirty(true)
+      } else {
+         setPasswordConfirmDirty(false)
       }
    }
 
@@ -102,9 +126,27 @@ const AuthForm = ({ mode, onLogin }: AuthFormProps) => {
          }}
          onKeyDown={(e) => handleKeyDown(e)}
       >
-         <Typography component="h1" gutterBottom align="center" variant="h4">
-            {text}
-         </Typography>
+         <Box display="flex" justifyContent="center" alignItems="center" position="relative" m={2}>
+            <IconButton
+               onClick={() => {
+                  void navigate(sessionStorage.getItem("prevUrl"))
+               }}
+               aria-label="back"
+               size="small"
+               sx={{
+                  color: "white",
+                  position: "absolute",
+                  left: 0,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+               }}
+            >
+               <ArrowBackIosNewIcon />
+            </IconButton>
+            <Typography component="h1" gutterBottom align="center" variant="h4" m={0}>
+               {text}
+            </Typography>
+         </Box>
          {emailDirty && emailError && <Alert severity={"error"}>{emailError}</Alert>}
          <TextField
             variant="filled"
@@ -137,6 +179,28 @@ const AuthForm = ({ mode, onLogin }: AuthFormProps) => {
                borderColor: "white",
             }}
          />
+         {mode === "signup" && (
+            <>
+               {passwordConfirmDirty && (
+                  <Alert severity={"error"}>{"Passwords do not match"}</Alert>
+               )}
+               <TextField
+                  variant="filled"
+                  label="Password confirm"
+                  type="password"
+                  name="passwordConfirm"
+                  onBlur={(e) => blurHandler(e)}
+                  value={passwordConfirm}
+                  onChange={passwordConfirmHandler}
+                  sx={{
+                     bgcolor: "secondary.main",
+                     color: "white",
+                     borderRadius: "8px",
+                     borderColor: "white",
+                  }}
+               />
+            </>
+         )}
          <Button
             tabIndex={0}
             variant="outlined"
