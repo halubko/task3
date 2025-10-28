@@ -1,20 +1,20 @@
 import React, { useEffect } from "react"
 import { Outlet } from "react-router-dom"
-import { authAPI } from "./services/authService"
+import { useCheckAuthQuery } from "./services/authService"
 import { useAppDispatch, useAppSelector } from "./hooks/redux"
 import { setUser } from "./store/slices/authSlice"
 import { IUser } from "./models/IUser"
-import { cartAPI } from "./services/cartService"
+import { useAddCartMutation, useGetCartByUserIdQuery } from "./services/cartService"
 import { addCart } from "./store/slices/cartSlice"
 import { CircularProgress } from "@mui/material"
 
 export function App() {
-   const { data: userData, isLoading } = authAPI.useCheckAuthQuery()
+   const { data: userData, isLoading } = useCheckAuthQuery()
 
    //Not working at DummyJSON at all, but logic is the next:
    //When initializing the application, we check auth and automatically load the cart by userId
-   const { data: cartData } = cartAPI.useGetCartByUserIdQuery(userData?.id, { skip: !userData?.id })
-   const [createCart] = cartAPI.useAddCartMutation()
+   const { data: cartData } = useGetCartByUserIdQuery(userData?.id, { skip: !userData?.id })
+   const [createCart] = useAddCartMutation()
    const isAuth = useAppSelector((state) => state.auth.isAuthenticated)
 
    const dispatch = useAppDispatch()
