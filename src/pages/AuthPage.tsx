@@ -2,16 +2,15 @@ import React, { useEffect } from "react"
 import { Box, CircularProgress, Container } from "@mui/material"
 import AuthForm from "../components/auth/AuthForm"
 import AuthError from "../components/auth/AuthError"
-import { authAPI } from "../services/authService"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLoginUserMutation } from "../services/authService"
+import { useLocation } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../hooks/redux"
 import { setUser } from "../store/slices/authSlice"
-import { cartAPI } from "../services/cartService"
+import { useAddCartMutation } from "../services/cartService"
 
 const AuthPage = () => {
-   const [loginUser, { data, error, isLoading }] = authAPI.useLoginUserMutation()
-   const [addCart] = cartAPI.useAddCartMutation()
-   const navigate = useNavigate()
+   const [loginUser, { data, error, isLoading }] = useLoginUserMutation()
+   const [addCart] = useAddCartMutation()
    const location = useLocation()
    const dispatch = useAppDispatch()
    const products = useAppSelector((state) => state.cart.products)
@@ -28,7 +27,6 @@ const AuthPage = () => {
          if (location.pathname === "/auth/signup") {
             void addCart({ userId: data.id, products: products })
          }
-         void navigate(sessionStorage.getItem("prevUrl"))
       }
    }, [data])
 
@@ -43,7 +41,7 @@ const AuthPage = () => {
             flexDirection: "column",
          }}
       >
-         {error === undefined ? null : <AuthError error={error} />}
+         {error && <AuthError error={error} />}
          <Box sx={{ width: "100%" }}>
             {isLoading ? (
                <CircularProgress color="primary" sx={{ display: "block", margin: "auto" }} />

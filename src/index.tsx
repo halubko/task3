@@ -10,6 +10,8 @@ import AuthLayout from "./layouts/AuthLayout"
 import MainLayout from "./layouts/MainLayout"
 import ProductPage from "./pages/ProductPage"
 import CartPage from "./pages/CartPage"
+import NotFoundPage from "./pages/NotFoundPage"
+import ProtectedRoute from "./utils/ProtectedRoute"
 
 const root = document.getElementById("root")
 const app = createRoot(root)
@@ -28,8 +30,13 @@ const router = createBrowserRouter([
             path: "auth",
             Component: AuthLayout,
             children: [
-               { path: "login", Component: AuthPage },
-               { path: "signup", Component: AuthPage },
+               {
+                  Component: ProtectedRoute,
+                  children: [
+                     { path: "login", Component: AuthPage },
+                     { path: "signup", Component: AuthPage },
+                  ],
+               },
             ],
          },
          {
@@ -43,6 +50,7 @@ const router = createBrowserRouter([
          },
       ],
    },
+   { path: "*", Component: NotFoundPage },
 ])
 
 const customTheme = createTheme({
