@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import { AppBar, Badge, Box, IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material"
-import { ShoppingBasket, AccountCircle, Logout, MoreHoriz, Login } from "@mui/icons-material"
+import { AccountCircle, Login, ShoppingBasket } from "@mui/icons-material"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../hooks/redux"
 import { logoutUser } from "../store/slices/authSlice"
@@ -12,30 +12,23 @@ interface HeaderProps {
 const Header = ({ styles }: HeaderProps) => {
    const navigate = useNavigate()
    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null)
    const cartItems = useAppSelector((state) => state.cart.products)
    const isAuth = useAppSelector((state) => state.auth.isAuthenticated)
    const dispatch = useAppDispatch()
    const location = useLocation()
 
    const isMenuOpen = Boolean(anchorEl)
-   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
    const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-      setAnchorEl(event.currentTarget)
-   }
-
-   const handleMobileMenuClose = () => {
-      setMobileMoreAnchorEl(null)
+      if (isAuth) {
+         setAnchorEl(event.currentTarget)
+      } else {
+         void navigate("/auth/login")
+      }
    }
 
    const handleMenuClose = () => {
       setAnchorEl(null)
-      handleMobileMenuClose()
-   }
-
-   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-      setMobileMoreAnchorEl(event.currentTarget)
    }
 
    const cartItemCounter = useMemo(() => {
@@ -73,46 +66,6 @@ const Header = ({ styles }: HeaderProps) => {
       </Menu>
    )
 
-   const mobileMenuId = "primary-search-account-menu-mobile"
-   const renderMobileMenu = (
-      <Menu
-         anchorEl={mobileMoreAnchorEl}
-         anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-         }}
-         id={mobileMenuId}
-         keepMounted
-         transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-         }}
-         open={isMobileMenuOpen}
-         onClose={handleMobileMenuClose}
-      >
-         <MenuItem onClick={() => void navigate("/main/cart")}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-               <Badge badgeContent={cartItemCounter} color="error">
-                  <ShoppingBasket />
-               </Badge>
-            </IconButton>
-            <p>Cart</p>
-         </MenuItem>
-         <MenuItem onClick={handleAuth}>
-            <IconButton
-               size="large"
-               aria-label="account of current user"
-               aria-controls="primary-search-account-menu"
-               aria-haspopup="true"
-               color="inherit"
-            >
-               {isAuth ? <Logout /> : <Login />}
-            </IconButton>
-            {isAuth ? "Logout" : "Login"}
-         </MenuItem>
-      </Menu>
-   )
-
    return (
       <Box sx={styles}>
          <AppBar position="static" sx={{ borderRadius: 1 }}>
@@ -129,7 +82,7 @@ const Header = ({ styles }: HeaderProps) => {
                   ESHOP
                </Typography>
                <Box sx={{ flexGrow: 1 }} />
-               <Box sx={{ display: { xs: "none", md: "flex" } }}>
+               <Box sx={{ display: "flex" }}>
                   <IconButton
                      size="large"
                      aria-label="show 4 new mails"
@@ -140,34 +93,34 @@ const Header = ({ styles }: HeaderProps) => {
                         <ShoppingBasket />
                      </Badge>
                   </IconButton>
-                  <IconButton
-                     size="large"
-                     edge="end"
-                     aria-label="account of current user"
-                     aria-controls={menuId}
-                     aria-haspopup="true"
-                     onClick={handleProfileMenuOpen}
-                     color="inherit"
-                  >
-                     <AccountCircle />
-                  </IconButton>
-               </Box>
-               <Box sx={{ display: { xs: "flex", md: "none" } }}>
-                  <IconButton
-                     size="large"
-                     aria-label="show more"
-                     aria-controls={mobileMenuId}
-                     aria-haspopup="true"
-                     onClick={handleMobileMenuOpen}
-                     color="inherit"
-                  >
-                     <MoreHoriz />
-                  </IconButton>
+                  {isAuth ? (
+                     <IconButton
+                        size="large"
+                        edge="end"
+                        aria-label="account of current user"
+                        aria-controls={menuId}
+                        aria-haspopup="true"
+                        onClick={handleProfileMenuOpen}
+                        color="inherit"
+                     >
+                        <AccountCircle />
+                     </IconButton>
+                  ) : (
+                     <IconButton
+                        size="large"
+                        edge="end"
+                        aria-label="account of current user"
+                        aria-haspopup="true"
+                        onClick={handleProfileMenuOpen}
+                        color="inherit"
+                     >
+                        <Login />
+                     </IconButton>
+                  )}
                </Box>
             </Toolbar>
+            {renderMenu}
          </AppBar>
-         {renderMobileMenu}
-         {renderMenu}
       </Box>
    )
 }
