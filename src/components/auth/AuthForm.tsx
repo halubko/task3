@@ -104,9 +104,6 @@ const AuthForm = ({ mode, onLogin }: AuthFormProps) => {
       void onLogin({ username: "emilys", password: "emilyspass" })
    }
 
-   const linkTitle =
-      mode === "login" ? "Are you registered with us?" : "Maybe you are already registered?"
-
    const text = mode === "login" ? "Log In" : "Sign Up"
 
    const linkText = mode === "login" ? "Sign Up" : "Log In"
@@ -201,35 +198,51 @@ const AuthForm = ({ mode, onLogin }: AuthFormProps) => {
                />
             </>
          )}
-         <Button
-            tabIndex={0}
-            variant="outlined"
-            onClick={handleOnClick}
-            sx={{
-               color: "white",
-               borderColor: "white",
-               "&:hover": { bgcolor: "secondary.main", color: "primary.main" },
-               maxWidth: 120,
-               alignSelf: "center",
-               "&:disabled": {
-                  cursor: "not-allowed",
-                  color: alpha("#fff", 0.7),
-                  borderColor: alpha("#fff", 0.7),
-               },
-            }}
-            disabled={!formValid}
-         >
-            {text}
-         </Button>
-         <Box
-            sx={{ display: "flex", gap: 2, alignItems: "center", justifyContent: "space-between" }}
-         >
-            <Typography>{linkTitle}</Typography>
+         <Box display="flex" justifyContent="center" alignItems="center" position="relative">
+            <Button
+               tabIndex={0}
+               variant="outlined"
+               onClick={handleOnClick}
+               sx={{
+                  color: "white",
+                  borderColor: "white",
+                  "&:hover": { bgcolor: "secondary.main", color: "primary.main" },
+                  maxWidth: 120,
+                  "&:disabled": {
+                     cursor: "not-allowed",
+                     color: alpha("#fff", 0.7),
+                     borderColor: alpha("#fff", 0.7),
+                  },
+               }}
+               disabled={!formValid}
+            >
+               {text}
+            </Button>
             <MuiLink
                component={RouterLink}
                to={mode === "login" ? "/auth/signup" : "/auth/login"}
-               variant="h6"
-               sx={{ color: "inherit", cursor: "pointer", textDecoration: "none" }}
+               variant="button"
+               border="1px solid"
+               borderRadius={1}
+               py="5px"
+               px="10px"
+               bgcolor="secondary.main"
+               position="absolute"
+               right={0}
+               sx={{
+                  color: "primary.main",
+                  borderColor: "primary.main",
+                  "&:hover": {
+                     bgcolor: "primary.main",
+                     color: "secondary.main",
+                     borderColor: "secondary.main",
+                     transition: "all 100ms ease-in",
+                  },
+                  maxWidth: 120,
+                  alignSelf: "center",
+                  textDecoration: "none",
+                  transition: "all 100ms ease-in",
+               }}
             >
                {linkText}
             </MuiLink>
