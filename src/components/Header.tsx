@@ -23,6 +23,7 @@ const Header = ({ styles }: HeaderProps) => {
       if (isAuth) {
          setAnchorEl(event.currentTarget)
       } else {
+         sessionStorage.setItem("prevUrl", location.pathname)
          void navigate("/auth/login")
       }
    }
@@ -62,7 +63,7 @@ const Header = ({ styles }: HeaderProps) => {
          open={isMenuOpen}
          onClose={handleMenuClose}
       >
-         <MenuItem onClick={handleAuth}>{isAuth ? "Logout" : "Login"}</MenuItem>
+         <MenuItem onClick={handleAuth}>Logout</MenuItem>
       </Menu>
    )
 
@@ -93,30 +94,17 @@ const Header = ({ styles }: HeaderProps) => {
                         <ShoppingBasket />
                      </Badge>
                   </IconButton>
-                  {isAuth ? (
-                     <IconButton
-                        size="large"
-                        edge="end"
-                        aria-label="account of current user"
-                        aria-controls={menuId}
-                        aria-haspopup="true"
-                        onClick={handleProfileMenuOpen}
-                        color="inherit"
-                     >
-                        <AccountCircle />
-                     </IconButton>
-                  ) : (
-                     <IconButton
-                        size="large"
-                        edge="end"
-                        aria-label="account of current user"
-                        aria-haspopup="true"
-                        onClick={handleProfileMenuOpen}
-                        color="inherit"
-                     >
-                        <Login />
-                     </IconButton>
-                  )}
+                  <IconButton
+                     size="large"
+                     edge="end"
+                     aria-label="account of current user"
+                     aria-controls={menuId}
+                     aria-haspopup="true"
+                     onClick={handleProfileMenuOpen}
+                     color="inherit"
+                  >
+                     {isAuth ? <AccountCircle /> : <Login />}
+                  </IconButton>
                </Box>
             </Toolbar>
             {renderMenu}
