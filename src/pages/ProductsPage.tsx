@@ -75,7 +75,7 @@ const ProductsPage = () => {
             isLoading: isBaseLoading,
          }
       }
-   }, [searchData, baseData, categoryData, category])
+   }, [searchData, baseData, categoryData, category, searchQuery])
 
    const totalPages = data ? getPages(data.total, limit) : 1
 
